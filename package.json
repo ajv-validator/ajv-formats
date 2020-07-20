@@ -1,0 +1,29 @@
+{
+  "name": "ajv-formats",
+  "version": "0.0.1",
+  "description": "Format validation for Ajv v7 (WIP)",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajv-validator/ajv-formats.git"
+  },
+  "keywords": [
+    "Ajv",
+    "JSON-Schema",
+    "format",
+    "validation"
+  ],
+  "author": "Evgeny Poberezkin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ajv-validator/ajv-formats/issues"
+  },
+  "homepage": "https://github.com/ajv-validator/ajv-formats#readme",
+  "devDependencies": {
+    "typescript": "^3.9.7"
+  }
+}
