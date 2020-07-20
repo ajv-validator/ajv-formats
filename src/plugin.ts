@@ -1,8 +1,8 @@
 // TODO move plugin interface either to ajv or a separate package
-import { FormatValidator, FormatDefinition } from "./formats"
+import { FormatDefinition } from "./formats"
 
 export interface Ajv {
-  addFormat: (name: String, f: FormatValidator | FormatDefinition) => Ajv
+  addFormat: (name: String, f: FormatDefinition) => Ajv
 }
 
 export default interface AjvPlugin {

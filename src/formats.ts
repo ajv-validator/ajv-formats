@@ -1,28 +1,31 @@
 export type FormatMode = "fast" | "full"
 
-export type FormatValidator =
-  string | RegExp | ((data: string) => boolean | PromiseLike<any>)
-
-export type NumberFormatValidator =
-  ((data: number) => boolean | PromiseLike<any>)
+export type FormatValidator<T extends number | string> =
+  (data: T) => (boolean | PromiseLike<any>)
 
 export interface NumberFormatDefinition {
   type: "number"
-  validate: NumberFormatValidator
+  validate: FormatValidator<number>
   compare?: (data1: number, data2: number) => number
   async?: boolean
 }
 
 export interface StringFormatDefinition {
   type?: "string"
-  validate: FormatValidator
+  validate: string | RegExp | FormatValidator<string>
   compare?: (data1: string, data2: string) => number
   async?: boolean
 }
 
-export type FormatDefinition = FormatValidator | NumberFormatDefinition | StringFormatDefinition
+export type FormatDefinition =
+  string
+  | RegExp
+  | FormatValidator<string>
+  | NumberFormatDefinition
+  | StringFormatDefinition
 
-export type FormatName = "date"
+export type FormatName =
+  "date"
   | "time"
   | "date-time"
   | "uri"
@@ -39,7 +42,7 @@ export type FormatName = "date"
   | "json-pointer-uri-fragment"
   | "relative-json-pointer"
 
-type Formats = {
+export type Formats = {
   [key in FormatName]: FormatDefinition
 }
 
@@ -61,7 +64,7 @@ const JSON_POINTER = /^(?:\/(?:[^~/]|~0|~1)*)*$/
 const JSON_POINTER_URI_FRAGMENT = /^#(?:\/(?:[a-z0-9_\-.!$&'()*+,;:=@]|%[0-9a-f]{2}|~0|~1)*)*$/i
 const RELATIVE_JSON_POINTER = /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/
 
-export const standardFormats: { fast: Formats, full: Formats } = {
+export const formats: { fast: Formats, full: Formats } = {
   fast: {
     // date: http://tools.ietf.org/html/rfc3339#section-5.6
     date: /^\d\d\d\d-[0-1]\d-[0-3]\d$/,
@@ -96,7 +99,7 @@ export const standardFormats: { fast: Formats, full: Formats } = {
     date,
     time,
     "date-time": date_time,
-    uri: uri,
+    uri,
     "uri-reference": URIREF,
     "uri-template": URITEMPLATE,
     url: URL,
@@ -104,7 +107,7 @@ export const standardFormats: { fast: Formats, full: Formats } = {
     hostname: HOSTNAME,
     ipv4: /^(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)$/,
     ipv6: /^\s*(?:(?:(?:[0-9a-f]{1,4}:){7}(?:[0-9a-f]{1,4}|:))|(?:(?:[0-9a-f]{1,4}:){6}(?::[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){5}(?:(?:(?::[0-9a-f]{1,4}){1,2})|:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){4}(?:(?:(?::[0-9a-f]{1,4}){1,3})|(?:(?::[0-9a-f]{1,4})?:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){3}(?:(?:(?::[0-9a-f]{1,4}){1,4})|(?:(?::[0-9a-f]{1,4}){0,2}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){2}(?:(?:(?::[0-9a-f]{1,4}){1,5})|(?:(?::[0-9a-f]{1,4}){0,3}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){1}(?:(?:(?::[0-9a-f]{1,4}){1,6})|(?:(?::[0-9a-f]{1,4}){0,4}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?::(?:(?:(?::[0-9a-f]{1,4}){1,7})|(?:(?::[0-9a-f]{1,4}){0,5}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(?:%.+)?\s*$/i,
-    regex: regex,
+    regex,
     uuid: UUID,
     "json-pointer": JSON_POINTER,
     "json-pointer-uri-fragment": JSON_POINTER_URI_FRAGMENT,
@@ -119,25 +122,25 @@ function isLeapYear(year: number): boolean {
 
 function date(str: string): boolean {
   // full-date from http://tools.ietf.org/html/rfc3339#section-5.6
-  const matches = str.match(DATE)
+  const matches: string[] | null = str.match(DATE)
   if (!matches) return false
 
-  const year = +matches[1]
-  const month = +matches[2]
-  const day = +matches[3]
+  const year: number = +matches[1]
+  const month: number = +matches[2]
+  const day: number = +matches[3]
 
   return month >= 1 && month <= 12 && day >= 1 &&
     day <= (month == 2 && isLeapYear(year) ? 29 : DAYS[month])
 }
 
 function time(str: string, withTimeZone?: boolean): boolean {
-  const matches = str.match(TIME)
+  const matches: string[] | null = str.match(TIME)
   if (!matches) return false
 
-  const hour = +matches[1]
-  const minute = +matches[2]
-  const second = +matches[3]
-  const timeZone = matches[5]
+  const hour: number = +matches[1]
+  const minute: number = +matches[2]
+  const second: number = +matches[3]
+  const timeZone: string = matches[5]
   return ((hour <= 23 && minute <= 59 && second <= 59) ||
     (hour == 23 && minute == 59 && second == 60)) &&
     (!withTimeZone || timeZone !== "")
@@ -146,7 +149,7 @@ function time(str: string, withTimeZone?: boolean): boolean {
 const DATE_TIME_SEPARATOR = /t|\s/i
 function date_time(str: string): boolean {
   // http://tools.ietf.org/html/rfc3339#section-5.6
-  const dateTime = str.split(DATE_TIME_SEPARATOR)
+  const dateTime: string[] = str.split(DATE_TIME_SEPARATOR)
   return dateTime.length == 2 && date(dateTime[0]) && time(dateTime[1], true)
 }
 
