@@ -4,8 +4,11 @@
   "description": "Format validation for Ajv v7 (WIP)",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc && npm run prettier:write",
+    "prettier:write": "prettier --write './**/*.{md,json,yaml,js,ts}'",
+    "prettier:check": "prettier --list-different './**/*.{md,json,yaml,js,ts}'",
+    "eslint": "eslint --ext .ts ./src/**/*",
+    "test": "npm run prettier:check && npm run eslint && npm run build"
   },
   "repository": {
     "type": "git",
@@ -24,6 +27,23 @@
   },
   "homepage": "https://github.com/ajv-validator/ajv-formats#readme",
   "devDependencies": {
+    "@ajv-validator/config": "^0.1.0",
+    "@typescript-eslint/eslint-plugin": "^3.7.0",
+    "@typescript-eslint/parser": "^3.7.0",
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5",
     "typescript": "^3.9.7"
+  },
+  "prettier": "@ajv-validator/config/prettierrc.json",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{md,json,yaml,js,ts}": "prettier --write"
   }
 }

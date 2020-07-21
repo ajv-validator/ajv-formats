@@ -1,31 +1,35 @@
 export type FormatMode = "fast" | "full"
 
-export type FormatValidator<T extends number | string> =
-  (data: T) => (boolean | PromiseLike<any>)
+export type FormatValidator<
+  Data extends number | string,
+  Async extends boolean
+> = (data: Data) => Async extends false ? boolean : PromiseLike<boolean>
 
-export interface NumberFormatDefinition {
+export interface NumberFormatDefinition<Async extends boolean> {
   type: "number"
-  validate: FormatValidator<number>
+  validate: FormatValidator<number, Async>
+  async: Async extends false ? false | undefined : true
   compare?: (data1: number, data2: number) => number
-  async?: boolean
 }
 
-export interface StringFormatDefinition {
+export interface StringFormatDefinition<Async extends boolean> {
   type?: "string"
-  validate: string | RegExp | FormatValidator<string>
+  validate: Async extends false
+    ? string | RegExp | FormatValidator<string, false>
+    : FormatValidator<string, true>
+  async: Async extends false ? false | undefined : true
   compare?: (data1: string, data2: string) => number
-  async?: boolean
 }
 
 export type FormatDefinition =
-  string
+  | string
   | RegExp
-  | FormatValidator<string>
-  | NumberFormatDefinition
-  | StringFormatDefinition
+  | FormatValidator<string, false>
+  | NumberFormatDefinition<any>
+  | StringFormatDefinition<any>
 
 export type FormatName =
-  "date"
+  | "date"
   | "time"
   | "date-time"
   | "uri"
@@ -64,7 +68,7 @@ const JSON_POINTER = /^(?:\/(?:[^~/]|~0|~1)*)*$/
 const JSON_POINTER_URI_FRAGMENT = /^#(?:\/(?:[a-z0-9_\-.!$&'()*+,;:=@]|%[0-9a-f]{2}|~0|~1)*)*$/i
 const RELATIVE_JSON_POINTER = /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/
 
-export const formats: { fast: Formats, full: Formats } = {
+export const formats: {fast: Formats; full: Formats} = {
   fast: {
     // date: http://tools.ietf.org/html/rfc3339#section-5.6
     date: /^\d\d\d\d-[0-1]\d-[0-3]\d$/,
@@ -112,7 +116,7 @@ export const formats: { fast: Formats, full: Formats } = {
     "json-pointer": JSON_POINTER,
     "json-pointer-uri-fragment": JSON_POINTER_URI_FRAGMENT,
     "relative-json-pointer": RELATIVE_JSON_POINTER,
-  }
+  },
 }
 
 function isLeapYear(year: number): boolean {
@@ -122,28 +126,34 @@ function isLeapYear(year: number): boolean {
 
 function date(str: string): boolean {
   // full-date from http://tools.ietf.org/html/rfc3339#section-5.6
-  const matches: string[] | null = str.match(DATE)
+  const matches: string[] | null = DATE.exec(str)
   if (!matches) return false
 
   const year: number = +matches[1]
   const month: number = +matches[2]
   const day: number = +matches[3]
 
-  return month >= 1 && month <= 12 && day >= 1 &&
+  return (
+    month >= 1 &&
+    month <= 12 &&
+    day >= 1 &&
     day <= (month == 2 && isLeapYear(year) ? 29 : DAYS[month])
+  )
 }
 
 function time(str: string, withTimeZone?: boolean): boolean {
-  const matches: string[] | null = str.match(TIME)
+  const matches: string[] | null = TIME.exec(str)
   if (!matches) return false
 
   const hour: number = +matches[1]
   const minute: number = +matches[2]
   const second: number = +matches[3]
   const timeZone: string = matches[5]
-  return ((hour <= 23 && minute <= 59 && second <= 59) ||
-    (hour == 23 && minute == 59 && second == 60)) &&
+  return (
+    ((hour <= 23 && minute <= 59 && second <= 59) ||
+      (hour == 23 && minute == 59 && second == 60)) &&
     (!withTimeZone || timeZone !== "")
+  )
 }
 
 const DATE_TIME_SEPARATOR = /t|\s/i
