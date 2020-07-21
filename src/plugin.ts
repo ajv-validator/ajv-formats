@@ -1,8 +1,11 @@
 // TODO move plugin interface either to ajv or a separate package
-import {Format} from "./formats"
+import {Format, FormatMode} from "./formats"
 
 export interface Ajv {
   addFormat: (name: string, f: Format) => Ajv
+  _opts: {
+    format: FormatMode | false
+  }
 }
 
 export default interface AjvPlugin {

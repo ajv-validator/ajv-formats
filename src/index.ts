@@ -9,36 +9,39 @@ import AjvPlugin, {Ajv} from "./plugin"
 
 export interface FormatOptions {
   mode: FormatMode
-  formats: Array<FormatName>
+  formats: FormatName[]
 }
 
-export type PluginOptions = FormatMode | Array<FormatName> | FormatOptions
+export type PluginOptions = FormatMode | FormatName[] | FormatOptions
 
 const formatsPlugin: AjvPlugin = function (
   ajv: Ajv,
-  opts: PluginOptions = "fast"
+  opts: PluginOptions = "full"
 ): Ajv {
   if (typeof opts === "string") {
-    const fs: DefinedFormats = formats[opts]
-    let f: FormatName
-    for (f in fs) {
-      ajv.addFormat(f, fs[f])
-    }
+    const fs = formats[opts]
+    const names = Object.keys(fs) as FormatName[]
+    addFormats(names, fs, opts)
   } else if (Array.isArray(opts)) {
-    const fs: DefinedFormats = formats.fast
-    for (const f of opts) {
-      ajv.addFormat(f, fs[f])
-    }
+    addFormats(opts, formats.full, "full")
   } else {
-    const fs: DefinedFormats = formats[opts.mode]
-    for (const f of opts.formats) {
-      ajv.addFormat(f, fs[f])
-    }
+    addFormats(opts.formats, formats[opts.mode], opts.mode)
   }
   return ajv
+
+  function addFormats(
+    list: FormatName[],
+    fs: DefinedFormats,
+    mode: FormatMode
+  ) {
+    for (const f of list) {
+      ajv.addFormat(f, fs[f])
+    }
+    ajv._opts.format = mode
+  }
 }
 
-export default formatsPlugin
+module.exports = formatsPlugin
 
 formatsPlugin.get = get
 
