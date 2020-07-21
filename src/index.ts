@@ -1,8 +1,8 @@
 import {
-  Formats,
+  Format,
+  DefinedFormats,
   FormatMode,
   FormatName,
-  FormatDefinition,
   formats,
 } from "./formats"
 import AjvPlugin, {Ajv} from "./plugin"
@@ -19,18 +19,18 @@ const formatsPlugin: AjvPlugin = function (
   opts: PluginOptions = "fast"
 ): Ajv {
   if (typeof opts === "string") {
-    const fs: Formats = formats[opts]
+    const fs: DefinedFormats = formats[opts]
     let f: FormatName
     for (f in fs) {
       ajv.addFormat(f, fs[f])
     }
   } else if (Array.isArray(opts)) {
-    const fs: Formats = formats.fast
+    const fs: DefinedFormats = formats.fast
     for (const f of opts) {
       ajv.addFormat(f, fs[f])
     }
   } else {
-    const fs: Formats = formats[opts.mode]
+    const fs: DefinedFormats = formats[opts.mode]
     for (const f of opts.formats) {
       ajv.addFormat(f, fs[f])
     }
@@ -42,7 +42,7 @@ export default formatsPlugin
 
 formatsPlugin.get = get
 
-function get(mode: FormatMode, format: FormatName): FormatDefinition {
+function get(mode: FormatMode, format: FormatName): Format {
   const f = formats[mode][format]
   if (!f) throw new Error("Unknown format " + format)
   return f

@@ -1,32 +1,35 @@
 export type FormatMode = "fast" | "full"
 
-export type FormatValidator<
-  Data extends number | string,
-  Async extends boolean
-> = (data: Data) => Async extends false ? boolean : PromiseLike<boolean>
+type SN = string | number
 
-export interface NumberFormatDefinition<Async extends boolean> {
-  type: "number"
-  validate: FormatValidator<number, Async>
-  async: Async extends false ? false | undefined : true
-  compare?: (data1: number, data2: number) => number
+export type FormatValidator<T extends SN> = (data: T) => boolean
+
+export type FormatCompare<T extends SN> = (data1: T, data2: T) => boolean
+
+export type AsyncFormatValidator<T extends SN> = (
+  data: T
+) => PromiseLike<boolean>
+
+export interface FormatDefinition<T extends SN> {
+  type: T extends string ? "string" : "number"
+  validate: FormatValidator<T> | (T extends string ? string | RegExp : never)
+  async?: false | undefined
+  compare?: FormatCompare<T>
 }
 
-export interface StringFormatDefinition<Async extends boolean> {
-  type?: "string"
-  validate: Async extends false
-    ? string | RegExp | FormatValidator<string, false>
-    : FormatValidator<string, true>
-  async: Async extends false ? false | undefined : true
-  compare?: (data1: string, data2: string) => number
+export interface AsyncFormatDefinition<T extends SN> {
+  type: T extends string ? "string" : "number"
+  validate: AsyncFormatValidator<T>
+  async: true
+  compare?: FormatCompare<T>
 }
 
-export type FormatDefinition =
+export type Format =
   | string
   | RegExp
-  | FormatValidator<string, false>
-  | NumberFormatDefinition<any>
-  | StringFormatDefinition<any>
+  | FormatValidator<string>
+  | FormatDefinition<any>
+  | AsyncFormatDefinition<any>
 
 export type FormatName =
   | "date"
@@ -46,8 +49,8 @@ export type FormatName =
   | "json-pointer-uri-fragment"
   | "relative-json-pointer"
 
-export type Formats = {
-  [key in FormatName]: FormatDefinition
+export type DefinedFormats = {
+  [key in FormatName]: Format
 }
 
 const DATE = /^(\d\d\d\d)-(\d\d)-(\d\d)$/
@@ -68,7 +71,7 @@ const JSON_POINTER = /^(?:\/(?:[^~/]|~0|~1)*)*$/
 const JSON_POINTER_URI_FRAGMENT = /^#(?:\/(?:[a-z0-9_\-.!$&'()*+,;:=@]|%[0-9a-f]{2}|~0|~1)*)*$/i
 const RELATIVE_JSON_POINTER = /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/
 
-export const formats: {fast: Formats; full: Formats} = {
+export const formats: {fast: DefinedFormats; full: DefinedFormats} = {
   fast: {
     // date: http://tools.ietf.org/html/rfc3339#section-5.6
     date: /^\d\d\d\d-[0-1]\d-[0-3]\d$/,
