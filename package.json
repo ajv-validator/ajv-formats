@@ -9,7 +9,8 @@
     "prettier:write": "prettier --write './**/*.{md,json,yaml,js,ts}'",
     "prettier:check": "prettier --list-different './**/*.{md,json,yaml,js,ts}'",
     "eslint": "eslint --ext .ts ./src/**/*",
-    "test": "npm run prettier:check && npm run eslint && npm run build"
+    "test": "jest",
+    "ci-test": "npm run prettier:check && npm run eslint && npm run build && npm run test"
   },
   "repository": {
     "type": "git",

@@ -10,10 +10,12 @@ addFormats(ajv, "full")
 const instances = [ajv]
 
 jsonSchemaTest(instances, {
-  description: `JSON-Schema Test Suite draft-07: ${instances.length} ajv instances with different options`,
+  description: `JSON-Schema Test Suite draft-07 + extras: ${instances.length} ajv instances with different options`,
   suites: {
-    draft7:
-      "./JSON-Schema-Test-Suite/tests/draft7/optional/{format/*,ecmascript-regex}.json",
+    "draft-07 formats":
+      "./JSON-Schema-Test-Suite/tests/draft7/optional/format/*.json",
+    "draft-07 regex":
+      "./JSON-Schema-Test-Suite/tests/draft7/optional/ecmascript-regex.json",
     extras: "./extras/{**/,}*.json",
   },
   only: [],

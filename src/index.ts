@@ -21,23 +21,18 @@ const formatsPlugin: AjvPlugin = function (
   if (typeof opts === "string") {
     const fs = formats[opts]
     const names = Object.keys(fs) as FormatName[]
-    addFormats(names, fs, opts)
+    addFormats(names, fs)
   } else if (Array.isArray(opts)) {
-    addFormats(opts, formats.full, "full")
+    addFormats(opts, formats.full)
   } else {
-    addFormats(opts.formats, formats[opts.mode], opts.mode)
+    addFormats(opts.formats, formats[opts.mode])
   }
   return ajv
 
-  function addFormats(
-    list: FormatName[],
-    fs: DefinedFormats,
-    mode: FormatMode
-  ) {
+  function addFormats(list: FormatName[], fs: DefinedFormats) {
     for (const f of list) {
       ajv.addFormat(f, fs[f])
     }
-    ajv._opts.format = mode
   }
 }
 
