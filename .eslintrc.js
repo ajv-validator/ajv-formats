@@ -1,7 +1,21 @@
+const jsConfig = require("@ajv-validator/config/.eslintrc_js")
+const tsConfig = require("@ajv-validator/config/.eslintrc")
+
 module.exports = {
-  ...require("@ajv-validator/config/.eslintrc"),
-  rules: {
-    "no-control-regex": 1,
-    "@typescript-eslint/prefer-regexp-exec": 1,
+  env: {
+    es6: true,
+    node: true,
   },
+  overrides: [
+    jsConfig,
+    {
+      ...tsConfig,
+      files: ["*.ts"],
+      rules: {
+        ...tsConfig.rules,
+        "no-control-regex": "off",
+        "@typescript-eslint/prefer-regexp-exec": "warn",
+      },
+    },
+  ],
 }

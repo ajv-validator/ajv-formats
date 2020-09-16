@@ -12,19 +12,12 @@ const instances = [ajv]
 jsonSchemaTest(instances, {
   description: `JSON-Schema Test Suite draft-07 + extras: ${instances.length} ajv instances with different options`,
   suites: {
-    "draft-07 formats":
-      "./JSON-Schema-Test-Suite/tests/draft7/optional/format/*.json",
-    "draft-07 regex":
-      "./JSON-Schema-Test-Suite/tests/draft7/optional/ecmascript-regex.json",
+    "draft-07 formats": "./JSON-Schema-Test-Suite/tests/draft7/optional/format/*.json",
+    "draft-07 regex": "./JSON-Schema-Test-Suite/tests/draft7/optional/ecmascript-regex.json",
     extras: "./extras/{**/,}*.json",
   },
   only: [],
-  skip: [
-    "format/idn-email",
-    "format/idn-hostname",
-    "format/iri",
-    "format/iri-reference",
-  ],
+  skip: ["format/idn-email", "format/idn-hostname", "format/iri", "format/iri-reference"],
   afterEach(res) {
     expect(typeof res.valid).toBe("boolean")
     if (res.valid === true) {
