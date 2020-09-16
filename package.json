@@ -29,7 +29,7 @@
     "url": "https://github.com/ajv-validator/ajv-formats/issues"
   },
   "homepage": "https://github.com/ajv-validator/ajv-formats#readme",
-  "peerDependencies": {
+  "dependencies": {
     "ajv": "^7.0.0-alpha.1"
   },
   "devDependencies": {
