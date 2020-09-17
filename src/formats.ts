@@ -81,16 +81,14 @@ function date(str: string): boolean {
   // full-date from http://tools.ietf.org/html/rfc3339#section-5.6
   const matches: string[] | null = DATE.exec(str)
   if (!matches) return false
-  const [, year, month, day]: (string | number)[] = matches
-  // const year: number = +matches[1]
-  // const month: number = +matches[2]
-  // const day: number = +matches[3]
-
+  const year: number = +matches[1]
+  const month: number = +matches[2]
+  const day: number = +matches[3]
   return (
-    +month >= 1 &&
-    +month <= 12 &&
-    +day >= 1 &&
-    +day <= (+month === 2 && isLeapYear(+year) ? 29 : DAYS[+month])
+    month >= 1 &&
+    month <= 12 &&
+    day >= 1 &&
+    day <= (month === 2 && isLeapYear(year) ? 29 : DAYS[month])
   )
 }
 

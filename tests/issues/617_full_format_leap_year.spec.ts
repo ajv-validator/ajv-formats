@@ -1,14 +1,12 @@
-"use strict"
-
-const Ajv = require("ajv")
-const addFormats = require("../..")
+import Ajv from "ajv"
+import addFormats from "../../dist"
 
 describe("PR #617, full date format validation should understand leap years", () => {
-  let ajv
+  let ajv: Ajv
 
   beforeAll(() => {
     ajv = new Ajv()
-    addFormats(ajv, "full")
+    addFormats(ajv)
   })
 
   test("should handle non leap year affected dates with date-time", () => {
