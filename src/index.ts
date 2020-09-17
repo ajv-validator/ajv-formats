@@ -1,42 +1,43 @@
-import {DefinedFormats, FormatMode, FormatName, formats} from "./formats"
+import {
+  DefinedFormats,
+  FormatMode,
+  FormatName,
+  formatNames,
+  fastFormats,
+  fullFormats,
+} from "./formats"
 import type Ajv from "ajv"
 import type {Plugin, Format} from "ajv"
 
 export {FormatMode, FormatName} from "./formats"
 export interface FormatOptions {
-  mode: FormatMode
-  formats: FormatName[]
+  mode?: FormatMode
+  formats?: FormatName[]
 }
 
-export type FormatsPluginOptions = FormatMode | FormatName[] | FormatOptions
+export type FormatsPluginOptions = FormatName[] | FormatOptions
 
 export interface FormatsPlugin extends Plugin<FormatsPluginOptions> {
   get: (mode: FormatMode, format: FormatName) => Format
 }
 
-const formatsPlugin: FormatsPlugin = (ajv: Ajv, opts: FormatsPluginOptions = "full"): Ajv => {
-  if (typeof opts === "string") {
-    const fs = formats[opts]
-    const names = Object.keys(fs) as FormatName[]
-    addFormats(ajv, names, fs)
-  } else if (Array.isArray(opts)) {
-    addFormats(ajv, opts, formats.full)
-  } else {
-    addFormats(ajv, opts.formats, formats[opts.mode])
-  }
-  return ajv
+const formatsPlugin: FormatsPlugin = (ajv: Ajv, opts: FormatsPluginOptions = {}): Ajv => {
+  if (Array.isArray(opts)) return addFormats(ajv, opts, fullFormats)
+  const formats = opts.mode === "fast" ? fastFormats : fullFormats
+  const list = opts.formats || formatNames
+  return addFormats(ajv, list, formats)
 }
 
-formatsPlugin.get = (mode: FormatMode, format: FormatName): Format => {
-  const f = formats[mode][format]
-  if (!f) throw new Error(`Unknown format "${format}"`)
+formatsPlugin.get = (mode: FormatMode, name: FormatName): Format => {
+  const formats = mode === "fast" ? fastFormats : fullFormats
+  const f = formats[name]
+  if (!f) throw new Error(`Unknown format "${name}"`)
   return f
 }
 
-function addFormats(ajv: Ajv, list: FormatName[], fs: DefinedFormats): void {
-  for (const f of list) {
-    ajv.addFormat(f, fs[f])
-  }
+function addFormats(ajv: Ajv, list: FormatName[], fs: DefinedFormats): Ajv {
+  for (const f of list) ajv.addFormat(f, fs[f])
+  return ajv
 }
 
 export default formatsPlugin

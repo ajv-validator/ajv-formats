@@ -15,7 +15,7 @@
     "eslint": "eslint --ext .ts ./src/**/*",
     "test-spec": "jest",
     "test": "npm run prettier:check && npm run build && npm run eslint && npm run test-spec",
-    "ci-test": "npm run prettier:check && npm run eslint && npm run build && npm run test"
+    "ci-test": "npm run test"
   },
   "repository": {
     "type": "git",
