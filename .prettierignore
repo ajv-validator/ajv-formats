@@ -1,2 +1,3 @@
 tests/JSON-Schema-Test-Suite
 dist
+coverage

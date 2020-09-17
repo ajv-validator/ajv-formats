@@ -18,7 +18,7 @@ export interface FormatOptions {
 export type FormatsPluginOptions = FormatName[] | FormatOptions
 
 export interface FormatsPlugin extends Plugin<FormatsPluginOptions> {
-  get: (mode: FormatMode, format: FormatName) => Format
+  get: (format: FormatName, mode?: FormatMode) => Format
 }
 
 const formatsPlugin: FormatsPlugin = (ajv: Ajv, opts: FormatsPluginOptions = {}): Ajv => {
@@ -28,7 +28,7 @@ const formatsPlugin: FormatsPlugin = (ajv: Ajv, opts: FormatsPluginOptions = {})
   return addFormats(ajv, list, formats)
 }
 
-formatsPlugin.get = (mode: FormatMode, name: FormatName): Format => {
+formatsPlugin.get = (name: FormatName, mode: FormatMode = "full"): Format => {
   const formats = mode === "fast" ? fastFormats : fullFormats
   const f = formats[name]
   if (!f) throw new Error(`Unknown format "${name}"`)
