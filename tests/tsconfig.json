@@ -1,0 +1,8 @@
+{
+  "extends": "..",
+  "include": ["."],
+  "compilerOptions": {
+    "outDir": "../.distspec",
+    "types": ["node", "jest"]
+  }
+}

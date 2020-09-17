@@ -9,7 +9,7 @@ describe("addFormats options", () => {
     ajv = new Ajv()
   })
 
-  it("should add passed list of formats", () => {
+  test("should add passed list of formats", () => {
     addFormats(ajv, ["date", "time"])
     const validateDate = ajv.compile({format: "date"})
     expect(validateDate("2020-09-17")).toEqual(true)
@@ -24,7 +24,7 @@ describe("addFormats options", () => {
     expect(() => ajv.compile({format: "date-time"})).not.toThrow()
   })
 
-  it("should support validation mode", () => {
+  test("should support validation mode", () => {
     addFormats(ajv, {mode: "fast", formats: ["date", "time"]})
     const validateDate = ajv.compile({format: "date"})
     expect(validateDate("2020-09-17")).toEqual(true)
@@ -39,7 +39,7 @@ describe("addFormats options", () => {
 })
 
 describe("method get", () => {
-  it("should return format definition", () => {
+  test("should return format definition", () => {
     const timeFormat = addFormats.get("time")
     expect(timeFormat).toBeInstanceOf(Function)
 
