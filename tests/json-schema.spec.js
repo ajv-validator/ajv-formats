@@ -2,7 +2,7 @@ const jsonSchemaTest = require("json-schema-test")
 const Ajv = require("ajv")
 const addFormats = require("../dist")
 
-const ajv = new Ajv({$data: true})
+const ajv = new Ajv({$data: true, strictTypes: false})
 addFormats(ajv)
 
 jsonSchemaTest(ajv, {

@@ -10,8 +10,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prettier:write": "prettier --write './**/*.{md,json,yaml,js,ts}'",
-    "prettier:check": "prettier --list-different './**/*.{md,json,yaml,js,ts}'",
+    "prettier:write": "prettier --write \"./**/*.{md,json,yaml,js,ts}\"",
+    "prettier:check": "prettier --list-different \"./**/*.{md,json,yaml,js,ts}\"",
     "eslint": "eslint --ext .ts ./src/**/*",
     "test-spec": "jest",
     "test-cov": "jest --coverage",
