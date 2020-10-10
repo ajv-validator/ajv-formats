@@ -5,7 +5,7 @@ describe("PR #617, full date format validation should understand leap years", ()
   let ajv: Ajv
 
   beforeAll(() => {
-    ajv = new Ajv()
+    ajv = new Ajv({strictTypes: false})
     addFormats(ajv)
   })
 

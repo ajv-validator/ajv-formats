@@ -6,7 +6,7 @@ describe("addFormats options", () => {
   let ajv: Ajv
 
   beforeEach(() => {
-    ajv = new Ajv()
+    ajv = new Ajv({strictTypes: false})
   })
 
   test("should add passed list of formats", () => {
