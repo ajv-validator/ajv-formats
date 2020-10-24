@@ -41,6 +41,33 @@ See regular expressions used for format validation and the sources that were use
 
 **Please note**: JSON Schema draft-07 also defines formats `iri`, `iri-reference`, `idn-hostname` and `idn-email` for URLs, hostnames and emails with international characters. These formats are available in [ajv-formats-draft2019](https://github.com/luzlab/ajv-formats-draft2019) plugin.
 
+## Keywords to compare values: `formatMaximum` / `formatMinimum` and `formatExclusiveMaximum` / `formatExclusiveMinimum`
+
+These keywords allow to define minimum/maximum constraints when the format keyword defines ordering (`compare` function in format definition).
+
+Rhese keywords are added to ajv instance when ajv-formats is used without options or with option `keywords: true`.
+
+These keywords apply only to strings. If the data is not a string, the validation succeeds.
+
+The value of keywords `formatMaximum`/`formatMinimum` and `formatExclusiveMaximum`/`formatExclusiveMinimum` should be a string or [\$data reference](https://github.com/ajv-validator/ajv/blob/v7-beta/docs/validation.md#data-reference). This value is the maximum (minimum) allowed value for the data to be valid as determined by `format` keyword. If `format` keyword is not present schema compilation will throw exception.
+
+When these keyword are added, they also add comparison functions to formats `"date"`, `"time"` and `"date-time"`. User-defined formats also can have comparison functions. See [addFormat](https://github.com/ajv-validator/ajv/blob/v7-beta/docs/api.md#api-addformat) method.
+
+```javascript
+require("ajv-formats")(ajv)
+
+const schema = {
+  type: "string",
+  format: "date",
+  formatMinimum: "2016-02-06",
+  formatExclusiveMaximum: "2016-12-27",
+}
+
+const validDataList = ["2016-02-06", "2016-12-26"]
+
+const invalidDataList = ["2016-02-05", "2016-12-27", "abc"]
+```
+
 ## Options
 
 Options can be passed via the second parameter. Options value can be
@@ -57,7 +84,7 @@ addFormats(ajv, ["date", "time"])
 const ajv = new Ajv((formats: {date: true, time: true})) // to ignore "date" and "time" formats in schemas.
 ```
 
-2. Format validation mode (default is `"full"`) with optional list of format names:
+2. Format validation mode (default is `"full"`) with optional list of format names and `keywords` option to add additional format comparison keywords:
 
 ```javascript
 addFormats(ajv, {mode: "fast"})
@@ -66,7 +93,7 @@ addFormats(ajv, {mode: "fast"})
 or
 
 ```javascript
-addFormats(ajv, {mode: "fast", formats: ["date", "time"]})
+addFormats(ajv, {mode: "fast", formats: ["date", "time"], keywords: true})
 ```
 
 In `"fast"` mode the following formats are simplified: `"date"`, `"time"`, `"date-time"`, `"uri"`, `"uri-reference"`, `"email"`. For example `"date"`, `"time"` and `"date-time"` do not validate ranges in `"fast"` mode, only string structure, and other formats have simplified regular expressions.
