@@ -1,0 +1,374 @@
+[
+  {
+    "description": "formatMaximum in the property",
+    "schema": {
+      "properties": {
+        "finalDate": {
+          "format": "date",
+          "formatMaximum": {"$data": "1/beforeThan"}
+        },
+        "beforeThan": {}
+      }
+    },
+    "tests": [
+      {
+        "description": "after the maximum date is invalid",
+        "data": {
+          "finalDate": "2015-11-09",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": false
+      },
+      {
+        "description": "boundary point is valid",
+        "data": {
+          "finalDate": "2015-08-17",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": true
+      },
+      {
+        "description": "before the maximum date is valid",
+        "data": {
+          "finalDate": "2014-12-03",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": true
+      },
+      {
+        "description": "ignores non-strings",
+        "data": {
+          "finalDate": 2015,
+          "beforeThan": "2015-08-17"
+        },
+        "valid": true
+      },
+      {
+        "description": "fails if value of formatMaximum is not string",
+        "data": {
+          "finalDate": "2014-12-03",
+          "beforeThan": 2015
+        },
+        "valid": false
+      },
+      {
+        "description": "valid if value of formatMaximum is undefined",
+        "data": {
+          "finalDate": "2014-12-03"
+        },
+        "valid": true
+      }
+    ]
+  },
+  {
+    "description": "formatMaximum in the property with formatExclusiveMaximum",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "finalDate": {
+          "type": "string",
+          "format": "date",
+          "formatExclusiveMaximum": {"$data": "1/beforeThan"}
+        },
+        "beforeThan": {}
+      }
+    },
+    "tests": [
+      {
+        "description": "after the maximum date is still invalid",
+        "data": {
+          "finalDate": "2015-11-09",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": false
+      },
+      {
+        "description": "boundary point is invalid",
+        "data": {
+          "finalDate": "2015-08-17",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": false
+      },
+      {
+        "description": "before the maximum date is still valid",
+        "data": {
+          "finalDate": "2014-12-03",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": true
+      }
+    ]
+  },
+
+  {
+    "description": "formatMaximum with format in the property",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "when": {
+          "type": "string",
+          "format": {"$data": "1/whenFormat"},
+          "formatMaximum": "2015-08-17"
+        },
+        "whenFormat": {}
+      }
+    },
+    "tests": [
+      {
+        "description": "after the maximum date is invalid",
+        "data": {
+          "when": "2015-11-09",
+          "whenFormat": "date"
+        },
+        "valid": false
+      },
+      {
+        "description": "boundary point is valid",
+        "data": {
+          "when": "2015-08-17",
+          "whenFormat": "date"
+        },
+        "valid": true
+      },
+      {
+        "description": "before the maximum date is valid",
+        "data": {
+          "when": "2014-12-03",
+          "whenFormat": "date"
+        },
+        "valid": true
+      }
+    ]
+  },
+  {
+    "description": "formatMaximum with format in the property and with formatExclusiveMaximum",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "when": {
+          "type": "string",
+          "format": {"$data": "1/whenFormat"},
+          "formatExclusiveMaximum": "2015-08-17"
+        },
+        "whenFormat": {}
+      }
+    },
+    "tests": [
+      {
+        "description": "after the maximum date is still invalid",
+        "data": {
+          "when": "2015-11-09",
+          "whenFormat": "date"
+        },
+        "valid": false
+      },
+      {
+        "description": "boundary point is invalid",
+        "data": {
+          "when": "2015-08-17",
+          "whenFormat": "date"
+        },
+        "valid": false
+      },
+      {
+        "description": "before the maximum date is still valid",
+        "data": {
+          "when": "2014-12-03",
+          "whenFormat": "date"
+        },
+        "valid": true
+      }
+    ]
+  },
+
+  {
+    "description": "formatMaximum and format in the properties",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "when": {
+          "type": "string",
+          "format": {"$data": "1/whenFormat"},
+          "formatMaximum": {"$data": "1/beforeThan"}
+        },
+        "whenFormat": {},
+        "beforeThan": {}
+      }
+    },
+    "tests": [
+      {
+        "description": "after the maximum date is invalid",
+        "data": {
+          "when": "2015-11-09",
+          "whenFormat": "date",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": false
+      },
+      {
+        "description": "boundary point is valid",
+        "data": {
+          "when": "2015-08-17",
+          "whenFormat": "date",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": true
+      },
+      {
+        "description": "before the maximum date is valid",
+        "data": {
+          "when": "2014-12-03",
+          "whenFormat": "date",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": true
+      }
+    ]
+  },
+  {
+    "description": "formatMaximum and format in the properties with formatExclusiveMaximum",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "when": {
+          "type": "string",
+          "format": {"$data": "1/whenFormat"},
+          "formatExclusiveMaximum": {"$data": "1/beforeThan"}
+        },
+        "whenFormat": {},
+        "beforeThan": {}
+      }
+    },
+    "tests": [
+      {
+        "description": "after the maximum date is still invalid",
+        "data": {
+          "when": "2015-11-09",
+          "whenFormat": "date",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": false
+      },
+      {
+        "description": "boundary point is invalid",
+        "data": {
+          "when": "2015-08-17",
+          "whenFormat": "date",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": false
+      },
+      {
+        "description": "before the maximum date is still valid",
+        "data": {
+          "when": "2014-12-03",
+          "whenFormat": "date",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": true
+      }
+    ]
+  },
+
+  {
+    "description": "formatExclusiveMaximum in the property",
+    "schema": {
+      "properties": {
+        "finalDate": {
+          "format": "date",
+          "formatExclusiveMaximum": {"$data": "1/beforeThan"}
+        },
+        "beforeThan": {}
+      }
+    },
+    "tests": [
+      {
+        "description": "after the maximum date is invalid",
+        "data": {
+          "finalDate": "2015-11-09",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": false
+      },
+      {
+        "description": "before the maximum date is valid",
+        "data": {
+          "finalDate": "2014-12-03",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": true
+      },
+      {
+        "description": "boundary point is invalid",
+        "data": {
+          "finalDate": "2015-08-17",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": false
+      },
+      {
+        "description": "fails if value of formatExclusiveMaximum is not string",
+        "data": {
+          "finalDate": "2014-12-03",
+          "beforeThan": 2015
+        },
+        "valid": false
+      }
+    ]
+  },
+
+  {
+    "description": "format and formatExclusiveMaximum in the properties",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "when": {
+          "type": "string",
+          "format": {"$data": "1/whenFormat"},
+          "formatExclusiveMaximum": {"$data": "1/beforeThan"}
+        },
+        "beforeThan": {},
+        "whenFormat": {}
+      }
+    },
+    "tests": [
+      {
+        "description": "after the maximum date is invalid",
+        "data": {
+          "when": "2015-11-09",
+          "whenFormat": "date",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": false
+      },
+      {
+        "description": "boundary point is invalid",
+        "data": {
+          "when": "2015-08-17",
+          "whenFormat": "date",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": false
+      },
+      {
+        "description": "before the maximum date is valid",
+        "data": {
+          "when": "2014-12-03",
+          "whenFormat": "date",
+          "beforeThan": "2015-08-17"
+        },
+        "valid": true
+      },
+      {
+        "description": "fails if value of formatExclusiveMaximum is not string",
+        "data": {
+          "when": "2014-12-03",
+          "whenFormat": "date",
+          "beforeThan": 2015
+        },
+        "valid": false
+      }
+    ]
+  }
+]
