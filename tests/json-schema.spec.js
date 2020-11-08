@@ -10,6 +10,9 @@ jsonSchemaTest(ajv, {
   suites: {
     "draft-07 formats": "./JSON-Schema-Test-Suite/tests/draft7/optional/format/*.json",
     "draft-07 regex": "./JSON-Schema-Test-Suite/tests/draft7/optional/ecmascript-regex.json",
+    "draft-2019-09 formats": "./JSON-Schema-Test-Suite/tests/draft2019-09/optional/format/*.json",
+    "draft-2019-09 regex":
+      "./JSON-Schema-Test-Suite/tests/draft2019-09/optional/ecmascript-regex.json",
     extras: "./extras/{**/,}*.json",
   },
   only: [],

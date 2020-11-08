@@ -24,6 +24,7 @@ The package defines these formats:
 - _date_: full-date according to [RFC3339](http://tools.ietf.org/html/rfc3339#section-5.6).
 - _time_: time with optional time-zone.
 - _date-time_: date-time from the same source (time-zone is mandatory).
+- _duration_: duration from [RFC3339](https://tools.ietf.org/html/rfc3339#appendix-A)
 - _uri_: full URI.
 - _uri-reference_: URI reference, including full and relative URIs.
 - _uri-template_: URI template according to [RFC6570](https://tools.ietf.org/html/rfc6570)
