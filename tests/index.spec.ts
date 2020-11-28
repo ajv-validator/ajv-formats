@@ -1,4 +1,4 @@
-import Ajv from "ajv"
+import Ajv, {FormatDefinition} from "ajv"
 import addFormats from "../dist"
 import type {FormatName} from "../dist"
 
@@ -41,10 +41,10 @@ describe("addFormats options", () => {
 describe("method get", () => {
   test("should return format definition", () => {
     const timeFormat = addFormats.get("time")
-    expect(timeFormat).toBeInstanceOf(Function)
+    expect((timeFormat as FormatDefinition<string>).validate).toBeInstanceOf(Object)
 
     const fastTimeFormat = addFormats.get("time", "fast")
-    expect(fastTimeFormat).toBeInstanceOf(RegExp)
+    expect((fastTimeFormat as FormatDefinition<string>).validate).toBeInstanceOf(RegExp)
 
     expect(() => addFormats.get("unknown" as FormatName)).toThrow()
   })

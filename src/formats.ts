@@ -1,4 +1,5 @@
-import type {Format} from "ajv"
+import type {Format, FormatDefinition} from "ajv"
+import {FormatValidator, FormatCompare} from "ajv/dist/types"
 
 export type FormatMode = "fast" | "full"
 
@@ -25,12 +26,19 @@ export type DefinedFormats = {
   [key in FormatName]: Format
 }
 
+function fmtDef(
+  validate: RegExp | FormatValidator<string>,
+  compare: FormatCompare<string>
+): FormatDefinition<string> {
+  return {validate, compare}
+}
+
 export const fullFormats: DefinedFormats = {
   // date: http://tools.ietf.org/html/rfc3339#section-5.6
-  date,
+  date: fmtDef(date, compareDate),
   // date-time: http://tools.ietf.org/html/rfc3339#section-5.6
-  time,
-  "date-time": date_time,
+  time: fmtDef(time, compareTime),
+  "date-time": fmtDef(date_time, compareDateTime),
   // duration: https://tools.ietf.org/html/rfc3339#appendix-A
   duration: /^P(?!$)((\d+Y)?(\d+M)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+S)?)?|(\d+W)?)$/,
   uri,
@@ -58,15 +66,21 @@ export const fullFormats: DefinedFormats = {
 
 export const fastFormats: DefinedFormats = {
   ...fullFormats,
-  date: /^\d\d\d\d-[0-1]\d-[0-3]\d$/,
-  time: /^(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)?$/i,
-  "date-time": /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)$/i,
+  date: fmtDef(/^\d\d\d\d-[0-1]\d-[0-3]\d$/, compareDate),
+  time: fmtDef(
+    /^(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)?$/i,
+    compareTime
+  ),
+  "date-time": fmtDef(
+    /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)$/i,
+    compareDateTime
+  ),
   // uri: https://github.com/mafintosh/is-my-json-valid/blob/master/formats.js
   uri: /^(?:[a-z][a-z0-9+\-.]*:)(?:\/?\/)?[^\s]*$/i,
   "uri-reference": /^(?:(?:[a-z][a-z0-9+\-.]*:)?\/?\/)?(?:[^\\\s#][^\s#]*)?(?:#[^\\\s]*)?$/i,
   // email (sources from jsen validator):
   // http://stackoverflow.com/questions/201323/using-a-regular-expression-to-validate-an-email-address#answer-8829363
-  // http://www.w3.org/TR/html5/forms.html#valid-e-mail-address (search for 'willful violation')
+  // http://www.w3.org/TR/html5/forms.html#valid-e-mail-address (search for 'wilful violation')
   email: /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/i,
 }
 
@@ -95,6 +109,13 @@ function date(str: string): boolean {
   )
 }
 
+function compareDate(d1: string, d2: string): number | undefined {
+  if (!(d1 && d2)) return undefined
+  if (d1 > d2) return 1
+  if (d1 < d2) return -1
+  return 0
+}
+
 const TIME = /^(\d\d):(\d\d):(\d\d)(\.\d+)?(z|[+-]\d\d(?::?\d\d)?)?$/i
 
 function time(str: string, withTimeZone?: boolean): boolean {
@@ -112,11 +133,32 @@ function time(str: string, withTimeZone?: boolean): boolean {
   )
 }
 
+function compareTime(t1: string, t2: string): number | undefined {
+  if (!(t1 && t2)) return undefined
+  const a1 = TIME.exec(t1)
+  const a2 = TIME.exec(t2)
+  if (!(a1 && a2)) return undefined
+  t1 = a1[1] + a1[2] + a1[3] + (a1[4] || "")
+  t2 = a2[1] + a2[2] + a2[3] + (a2[4] || "")
+  if (t1 > t2) return 1
+  if (t1 < t2) return -1
+  return 0
+}
+
 const DATE_TIME_SEPARATOR = /t|\s/i
 function date_time(str: string): boolean {
   // http://tools.ietf.org/html/rfc3339#section-5.6
   const dateTime: string[] = str.split(DATE_TIME_SEPARATOR)
   return dateTime.length === 2 && date(dateTime[0]) && time(dateTime[1], true)
+}
+
+function compareDateTime(dt1: string, dt2: string): number | undefined {
+  if (!(dt1 && dt2)) return undefined
+  const [d1, t1] = dt1.split(DATE_TIME_SEPARATOR)
+  const [d2, t2] = dt2.split(DATE_TIME_SEPARATOR)
+  const res = compareDate(d1, d2)
+  if (res === undefined) return undefined
+  return res || compareTime(t1, t2)
 }
 
 const NOT_URI_FRAGMENT = /\/|:/
