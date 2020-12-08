@@ -1,5 +1,12 @@
 import type Ajv from "ajv"
-import type {Plugin, CodeKeywordDefinition, KeywordErrorDefinition, Code, Name} from "ajv"
+import type {
+  Plugin,
+  CodeKeywordDefinition,
+  KeywordErrorDefinition,
+  Code,
+  Name,
+  ErrorObject,
+} from "ajv"
 import type {AddedFormat} from "ajv/dist/types"
 import type {Rule} from "ajv/dist/compile/rules"
 import KeywordCxt from "ajv/dist/compile/context"
@@ -17,6 +24,8 @@ const KWDs: {[K in Kwd]: {okStr: Comparison; ok: Code; fail: Code}} = {
   formatExclusiveMaximum: {okStr: "<", ok: ops.LT, fail: ops.GTE},
   formatExclusiveMinimum: {okStr: ">", ok: ops.GT, fail: ops.LTE},
 }
+
+export type LimitFormatError = ErrorObject<Kwd, {limit: string; comparison: Comparison}>
 
 const error: KeywordErrorDefinition = {
   message: ({keyword, schemaCode}) => str`should be ${KWDs[keyword as Kwd].okStr} ${schemaCode}`,
