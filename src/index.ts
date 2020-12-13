@@ -12,6 +12,7 @@ import type {Plugin, Format} from "ajv"
 import {_, Name} from "ajv/dist/compile/codegen"
 
 export {FormatMode, FormatName} from "./formats"
+export {LimitFormatError} from "./limit"
 export interface FormatOptions {
   mode?: FormatMode
   formats?: FormatName[]
