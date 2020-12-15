@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/ajv-validator/ajv-formats#readme",
   "dependencies": {
-    "ajv": "^7.0.0-beta.7"
+    "ajv": "^7.0.0"
   },
   "devDependencies": {
     "@ajv-validator/config": "^0.3.0",
