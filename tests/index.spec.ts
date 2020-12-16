@@ -36,6 +36,18 @@ describe("addFormats options", () => {
     expect(validateTime("25:27:38")).toEqual(true)
     expect(validateTime("17:27")).toEqual(false)
   })
+
+  test("should support int32 format", () => {
+    addFormats(ajv, {formats: ["int32"]})
+    const validateDate = ajv.compile({format: "int32"})
+    expect(validateDate("35")).toEqual(true)
+    expect(validateDate(35)).toEqual(true)
+    expect(validateDate(-2147483648)).toEqual(true)
+    expect(validateDate(2147483647)).toEqual(true)
+    expect(validateDate("hi")).toEqual(false)
+    expect(validateDate("-2147483649")).toEqual(false)
+    expect(validateDate("2147483650")).toEqual(false)
+  })
 })
 
 describe("method get", () => {
