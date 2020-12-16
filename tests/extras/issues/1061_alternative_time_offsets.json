@@ -4,7 +4,7 @@
     "schema": {"format": "date-time"},
     "tests": [
       {
-        "description": "valid positiive two digit",
+        "description": "valid positive two digit",
         "data": "2016-01-31T02:31:17+01",
         "valid": true
       },
@@ -14,7 +14,7 @@
         "valid": true
       },
       {
-        "description": "valid positiive four digit no colon",
+        "description": "valid positive four digit no colon",
         "data": "2016-01-31T02:31:17+0130",
         "valid": true
       },
@@ -24,7 +24,7 @@
         "valid": true
       },
       {
-        "description": "invalid positiive three digit no colon",
+        "description": "invalid positive three digit no colon",
         "data": "2016-01-31T02:31:17+013",
         "valid": false
       },
@@ -40,7 +40,7 @@
     "schema": {"format": "time"},
     "tests": [
       {
-        "description": "valid positiive two digit",
+        "description": "valid positive two digit",
         "data": "02:31:17+01",
         "valid": true
       },
@@ -50,7 +50,7 @@
         "valid": true
       },
       {
-        "description": "valid positiive four digit no colon",
+        "description": "valid positive four digit no colon",
         "data": "02:31:17+0130",
         "valid": true
       },
@@ -60,7 +60,7 @@
         "valid": true
       },
       {
-        "description": "invalid positiive three digit no colon",
+        "description": "invalid positive three digit no colon",
         "data": "02:31:17+013",
         "valid": false
       },
