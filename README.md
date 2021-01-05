@@ -15,7 +15,7 @@ import Ajv from "ajv"
 import addFormats from "ajv-formats"
 // Node.js require:
 const Ajv = require("ajv").default
-const addFormats = require('ajv-formats').default;
+const addFormats = require("ajv-formats").default
 
 const ajv = new Ajv()
 addFormats(ajv)
