@@ -9,7 +9,7 @@ import type {
 } from "ajv"
 import type {AddedFormat} from "ajv/dist/types"
 import type {Rule} from "ajv/dist/compile/rules"
-import KeywordCxt from "ajv/dist/compile/context"
+import {KeywordCxt} from "ajv"
 import {_, str, or, getProperty, operators} from "ajv/dist/compile/codegen"
 
 type Kwd = "formatMaximum" | "formatMinimum" | "formatExclusiveMaximum" | "formatExclusiveMinimum"
