@@ -56,8 +56,7 @@ function addFormats(ajv: Ajv, list: FormatName[], fs: DefinedFormats, exportName
   for (const f of list) ajv.addFormat(f, fs[f])
 }
 
-export default formatsPlugin
+module.exports = exports = formatsPlugin
+Object.defineProperty(exports, "__esModule", {value: true})
 
-module.exports = formatsPlugin
-// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-module.exports.default = formatsPlugin
+export default formatsPlugin
