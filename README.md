@@ -46,7 +46,7 @@ See regular expressions used for format validation and the sources that were use
 
 These keywords allow to define minimum/maximum constraints when the format keyword defines ordering (`compare` function in format definition).
 
-Rhese keywords are added to ajv instance when ajv-formats is used without options or with option `keywords: true`.
+These keywords are added to ajv instance when ajv-formats is used without options or with option `keywords: true`.
 
 These keywords apply only to strings. If the data is not a string, the validation succeeds.
 
