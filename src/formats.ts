@@ -21,6 +21,13 @@ export type FormatName =
   | "json-pointer"
   | "json-pointer-uri-fragment"
   | "relative-json-pointer"
+  | "byte"
+  | "int32"
+  | "int64"
+  | "float"
+  | "double"
+  | "password"
+  | "binary"
 
 export type DefinedFormats = {
   [key in FormatName]: Format
@@ -62,6 +69,21 @@ export const fullFormats: DefinedFormats = {
   "json-pointer-uri-fragment": /^#(?:\/(?:[a-z0-9_\-.!$&'()*+,;:=@]|%[0-9a-f]{2}|~0|~1)*)*$/i,
   // relative JSON-pointer: http://tools.ietf.org/html/draft-luff-relative-json-pointer-00
   "relative-json-pointer": /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/,
+  // the following formats are used by the openapi specification: https://spec.openapis.org/oas/v3.0.0#data-types
+  // byte: https://github.com/miguelmota/is-base64
+  byte: /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/gm,
+  // signed 32 bit integer
+  int32: validateInteger(32),
+  // signed 64 bit integer
+  int64: validateInteger(64),
+  // C-type float
+  float: validateNumber(128),
+  // C-type double
+  double: validateNumber(1024),
+  // hint to the UI to hide input strings
+  password: true,
+  // unchecked string payload
+  binary: true,
 }
 
 export const fastFormats: DefinedFormats = {
@@ -167,6 +189,19 @@ const URI = /^(?:[a-z][a-z0-9+\-.]*:)(?:\/?\/(?:(?:[a-z0-9\-._~!$&'()*+,;=:]|%[0
 function uri(str: string): boolean {
   // http://jmrware.com/articles/2009/uri_regexp/URI_regex.html + optional protocol + required "."
   return NOT_URI_FRAGMENT.test(str) && URI.test(str)
+}
+
+function validateInteger(bits: number): (value: number | string) => boolean {
+  const max = BigInt(2) ** BigInt(bits - 1)
+  const min = max * BigInt(-1)
+  return (value) => Number.isInteger(+value) && BigInt(value) <= max && BigInt(value) >= min
+}
+
+function validateNumber(bits: number): (value: number | string) => boolean {
+  const max = Number(BigInt(2) ** BigInt(bits - 1))
+  const min = max * -1
+
+  return (value) => max >= value && min <= value
 }
 
 const Z_ANCHOR = /[^\\]\\Z/

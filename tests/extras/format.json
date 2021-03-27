@@ -728,5 +728,157 @@
         "valid": true
       }
     ]
+  },
+  {
+    "description": "validation of Byte",
+    "schema": {"format": "byte"},
+    "tests": [
+      {
+        "description": "'hello world' encoded in base64",
+        "data": "aGVsbG8gd29ybGQ=",
+        "valid": true
+      },
+      {
+        "description": "multiline base64",
+        "data": "VGhpcyBpcyBhIGJhc2U2NCBtdWx0aWxpbmUgc3RyaW5nIHRoYXQgc3BhbnMgbW9yZSB0aGFuIDc2\nIGNoYXJhY3RlcnMgdG8gdGVzdCBtdWx0aWxpbmUgY2FwYWJpbGl0aWVzCg==",
+        "valid": true
+      },
+      {
+        "description": "Invalid base64",
+        "data": "aGVsbG8gd29ybG=",
+        "valid": false
+      }
+    ]
+  },
+  {
+    "description": "validation of int32",
+    "schema": {"format": "int32"},
+    "tests": [
+      {
+        "description": "256 is ok",
+        "data": "256",
+        "valid": true
+      },
+      {
+        "description": "256.1 fails",
+        "data": "256.1",
+        "valid": false
+      },
+      {
+        "description": "2**32 fails",
+        "data": "4294967296",
+        "valid": false
+      },
+      {
+        "description": "non-numeric fails",
+        "data": "x",
+        "valid": false
+      }
+    ]
+  },
+  {
+    "description": "validation of int64",
+    "schema": {"format": "int64"},
+    "tests": [
+      {
+        "description": "256 is ok",
+        "data": "256",
+        "valid": true
+      },
+      {
+        "description": "256.1 fails",
+        "data": "256.1",
+        "valid": false
+      },
+      {
+        "description": "2**64 fails",
+        "data": "18446744073709551616",
+        "valid": false
+      },
+      {
+        "description": "non-numeric fails",
+        "data": "x",
+        "valid": false
+      }
+    ]
+  },
+  {
+    "description": "validation of float",
+    "schema": {"format": "float"},
+    "tests": [
+      {
+        "description": "256 is ok",
+        "data": "256",
+        "valid": true
+      },
+      {
+        "description": "256.1 is ok",
+        "data": "256.1",
+        "valid": true
+      },
+      {
+        "description": "2**128 fails",
+        "data": "3.402823669209385e+38",
+        "valid": false
+      },
+      {
+        "description": "non-numeric fails",
+        "data": "x",
+        "valid": false
+      }
+    ]
+  },
+  {
+    "description": "validation of double",
+    "schema": {"format": "double"},
+    "tests": [
+      {
+        "description": "256 is ok",
+        "data": "256",
+        "valid": true
+      },
+      {
+        "description": "256.1 is ok",
+        "data": "256.1",
+        "valid": true
+      },
+      {
+        "description": "2**1023 is ok",
+        "data": "8.98846567431158e+307",
+        "valid": true
+      },
+      {
+        "description": "2**1024 fails",
+        "data": "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216n",
+        "valid": false
+      },
+      {
+        "description": "non-numeric fails",
+        "data": "x",
+        "valid": false
+      }
+    ]
+  },
+  {
+    "description": "validation of password",
+    "schema": {"format": "password"},
+    "tests": [
+      {
+        "description": "'password string' is ok",
+        "data": "password string",
+        "valid": true
+      }
+    ]
+  },
+  {
+    "description": "validation of binary",
+    "schema": {"format": "binary"},
+    "tests": [
+      {
+        "description": "'binary string' is ok",
+        "data": "binary string",
+        "valid": true
+      }
+    ]
   }
 ]
