@@ -1,7 +1,7 @@
 {
   "name": "ajv-formats",
   "version": "2.0.0-beta.3",
-  "description": "Format validation for Ajv v7",
+  "description": "Format validation for Ajv v7+",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
