@@ -50,9 +50,9 @@ Rhese keywords are added to ajv instance when ajv-formats is used without option
 
 These keywords apply only to strings. If the data is not a string, the validation succeeds.
 
-The value of keywords `formatMaximum`/`formatMinimum` and `formatExclusiveMaximum`/`formatExclusiveMinimum` should be a string or [\$data reference](https://github.com/ajv-validator/ajv/blob/v7-beta/docs/validation.md#data-reference). This value is the maximum (minimum) allowed value for the data to be valid as determined by `format` keyword. If `format` keyword is not present schema compilation will throw exception.
+The value of keywords `formatMaximum`/`formatMinimum` and `formatExclusiveMaximum`/`formatExclusiveMinimum` should be a string or [\$data reference](https://github.com/ajv-validator/ajv/blob/master/docs/validation.md#data-reference). This value is the maximum (minimum) allowed value for the data to be valid as determined by `format` keyword. If `format` keyword is not present schema compilation will throw exception.
 
-When these keyword are added, they also add comparison functions to formats `"date"`, `"time"` and `"date-time"`. User-defined formats also can have comparison functions. See [addFormat](https://github.com/ajv-validator/ajv/blob/v7-beta/docs/api.md#api-addformat) method.
+When these keyword are added, they also add comparison functions to formats `"date"`, `"time"` and `"date-time"`. User-defined formats also can have comparison functions. See [addFormat](https://github.com/ajv-validator/ajv/blob/master/docs/api.md#api-addformat) method.
 
 ```javascript
 require("ajv-formats")(ajv)
