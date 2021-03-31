@@ -756,22 +756,32 @@
     "tests": [
       {
         "description": "256 is ok",
-        "data": "256",
+        "data": 256,
         "valid": true
       },
       {
         "description": "256.1 fails",
-        "data": "256.1",
+        "data": 256.1,
         "valid": false
       },
       {
-        "description": "2**32 fails",
-        "data": "4294967296",
+        "description": "-(2**31) is ok",
+        "data": -2147483648,
+        "valid": true
+      },
+      {
+        "description": "-(2**31) - 1 fails",
+        "data": -2147483649,
         "valid": false
       },
       {
-        "description": "non-numeric fails",
-        "data": "x",
+        "description": "(2**31)-1 is ok",
+        "data": 2147483647,
+        "valid": true
+      },
+      {
+        "description": "2**31 fails",
+        "data": 2147483648,
         "valid": false
       }
     ]
@@ -782,22 +792,12 @@
     "tests": [
       {
         "description": "256 is ok",
-        "data": "256",
+        "data": 256,
         "valid": true
       },
       {
-        "description": "256.1 fails",
-        "data": "256.1",
-        "valid": false
-      },
-      {
-        "description": "2**64 fails",
-        "data": "18446744073709551616",
-        "valid": false
-      },
-      {
-        "description": "non-numeric fails",
-        "data": "x",
+        "description": "float fails",
+        "data": 256.1,
         "valid": false
       }
     ]
@@ -807,24 +807,9 @@
     "schema": {"format": "float"},
     "tests": [
       {
-        "description": "256 is ok",
-        "data": "256",
-        "valid": true
-      },
-      {
         "description": "256.1 is ok",
-        "data": "256.1",
+        "data": 256.1,
         "valid": true
-      },
-      {
-        "description": "2**128 fails",
-        "data": "3.402823669209385e+38",
-        "valid": false
-      },
-      {
-        "description": "non-numeric fails",
-        "data": "x",
-        "valid": false
       }
     ]
   },
@@ -833,29 +818,9 @@
     "schema": {"format": "double"},
     "tests": [
       {
-        "description": "256 is ok",
-        "data": "256",
-        "valid": true
-      },
-      {
         "description": "256.1 is ok",
         "data": "256.1",
         "valid": true
-      },
-      {
-        "description": "2**1023 is ok",
-        "data": "8.98846567431158e+307",
-        "valid": true
-      },
-      {
-        "description": "2**1024 fails",
-        "data": "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216n",
-        "valid": false
-      },
-      {
-        "description": "non-numeric fails",
-        "data": "x",
-        "valid": false
       }
     ]
   },

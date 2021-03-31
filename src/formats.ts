@@ -73,13 +73,13 @@ export const fullFormats: DefinedFormats = {
   // byte: https://github.com/miguelmota/is-base64
   byte: /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/gm,
   // signed 32 bit integer
-  int32: validateInteger(32),
+  int32: {type: "number", validate: validateInt32},
   // signed 64 bit integer
-  int64: validateInteger(64),
+  int64: {type: "number", validate: validateInt64},
   // C-type float
-  float: validateNumber(128),
+  float: {type: "number", validate: validateNumber},
   // C-type double
-  double: validateNumber(1024),
+  double: {type: "number", validate: validateNumber},
   // hint to the UI to hide input strings
   password: true,
   // unchecked string payload
@@ -191,17 +191,20 @@ function uri(str: string): boolean {
   return NOT_URI_FRAGMENT.test(str) && URI.test(str)
 }
 
-function validateInteger(bits: number): (value: number | string) => boolean {
-  const max = BigInt(2) ** BigInt(bits - 1)
-  const min = max * BigInt(-1)
-  return (value) => Number.isInteger(+value) && BigInt(value) <= max && BigInt(value) >= min
+const MIN_INT32 = -(2 ** 31)
+const MAX_INT32 = 2 ** 31 - 1
+
+function validateInt32(value: number): boolean {
+  return Number.isInteger(value) && value <= MAX_INT32 && value >= MIN_INT32
 }
 
-function validateNumber(bits: number): (value: number | string) => boolean {
-  const max = Number(BigInt(2) ** BigInt(bits - 1))
-  const min = max * -1
+function validateInt64(value: number): boolean {
+  // JSON and javascript max Int is 2**53, so any int that passes isInteger is valid for Int64
+  return Number.isInteger(value)
+}
 
-  return (value) => max >= value && min <= value
+function validateNumber(): boolean {
+  return true
 }
 
 const Z_ANCHOR = /[^\\]\\Z/
