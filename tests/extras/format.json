@@ -752,7 +752,7 @@
   },
   {
     "description": "validation of int32",
-    "schema": {"format": "int32"},
+    "schema": {"type": "number", "format": "int32"},
     "tests": [
       {
         "description": "256 is ok",
@@ -783,12 +783,17 @@
         "description": "2**31 fails",
         "data": 2147483648,
         "valid": false
+      },
+      {
+        "description": "non-numeric fails",
+        "data": "x",
+        "valid": false
       }
     ]
   },
   {
     "description": "validation of int64",
-    "schema": {"format": "int64"},
+    "schema": {"type": "number", "format": "int64"},
     "tests": [
       {
         "description": "256 is ok",
@@ -799,28 +804,43 @@
         "description": "float fails",
         "data": 256.1,
         "valid": false
+      },
+      {
+        "description": "non-numeric fails",
+        "data": "x",
+        "valid": false
       }
     ]
   },
   {
     "description": "validation of float",
-    "schema": {"format": "float"},
+    "schema": {"type": "number", "format": "float"},
     "tests": [
       {
         "description": "256.1 is ok",
         "data": 256.1,
         "valid": true
+      },
+      {
+        "description": "non-numeric fails",
+        "data": "x",
+        "valid": false
       }
     ]
   },
   {
     "description": "validation of double",
-    "schema": {"format": "double"},
+    "schema": {"type": "number", "format": "double"},
     "tests": [
       {
         "description": "256.1 is ok",
-        "data": "256.1",
+        "data": 256.1,
         "valid": true
+      },
+      {
+        "description": "non-numeric fails",
+        "data": "x",
+        "valid": false
       }
     ]
   },
