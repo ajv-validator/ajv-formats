@@ -34,8 +34,16 @@
     "url": "https://github.com/ajv-validator/ajv-formats/issues"
   },
   "homepage": "https://github.com/ajv-validator/ajv-formats#readme",
+  "dependencies": {
+    "ajv": "^7.0.0"
+  },
   "peerDependencies": {
     "ajv": "^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "ajv": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@ajv-validator/config": "^0.3.0",
