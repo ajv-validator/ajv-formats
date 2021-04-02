@@ -1,6 +1,6 @@
 {
   "name": "ajv-formats",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Format validation for Ajv v7+",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -34,8 +34,16 @@
     "url": "https://github.com/ajv-validator/ajv-formats/issues"
   },
   "homepage": "https://github.com/ajv-validator/ajv-formats#readme",
+  "dependencies": {
+    "ajv": "^8.0.0"
+  },
   "peerDependencies": {
     "ajv": "^8.0.0"
+  },
+  "peerDependenciesMeta": {
+    "ajv": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@ajv-validator/config": "^0.3.0",
