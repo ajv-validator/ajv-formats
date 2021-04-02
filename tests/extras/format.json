@@ -728,5 +728,142 @@
         "valid": true
       }
     ]
+  },
+  {
+    "description": "validation of Byte",
+    "schema": {"format": "byte"},
+    "tests": [
+      {
+        "description": "'hello world' encoded in base64",
+        "data": "aGVsbG8gd29ybGQ=",
+        "valid": true
+      },
+      {
+        "description": "multiline base64",
+        "data": "VGhpcyBpcyBhIGJhc2U2NCBtdWx0aWxpbmUgc3RyaW5nIHRoYXQgc3BhbnMgbW9yZSB0aGFuIDc2\nIGNoYXJhY3RlcnMgdG8gdGVzdCBtdWx0aWxpbmUgY2FwYWJpbGl0aWVzCg==",
+        "valid": true
+      },
+      {
+        "description": "Invalid base64",
+        "data": "aGVsbG8gd29ybG=",
+        "valid": false
+      }
+    ]
+  },
+  {
+    "description": "validation of int32",
+    "schema": {"type": "number", "format": "int32"},
+    "tests": [
+      {
+        "description": "256 is ok",
+        "data": 256,
+        "valid": true
+      },
+      {
+        "description": "256.1 fails",
+        "data": 256.1,
+        "valid": false
+      },
+      {
+        "description": "-(2**31) is ok",
+        "data": -2147483648,
+        "valid": true
+      },
+      {
+        "description": "-(2**31) - 1 fails",
+        "data": -2147483649,
+        "valid": false
+      },
+      {
+        "description": "(2**31)-1 is ok",
+        "data": 2147483647,
+        "valid": true
+      },
+      {
+        "description": "2**31 fails",
+        "data": 2147483648,
+        "valid": false
+      },
+      {
+        "description": "non-numeric fails",
+        "data": "x",
+        "valid": false
+      }
+    ]
+  },
+  {
+    "description": "validation of int64",
+    "schema": {"type": "number", "format": "int64"},
+    "tests": [
+      {
+        "description": "256 is ok",
+        "data": 256,
+        "valid": true
+      },
+      {
+        "description": "float fails",
+        "data": 256.1,
+        "valid": false
+      },
+      {
+        "description": "non-numeric fails",
+        "data": "x",
+        "valid": false
+      }
+    ]
+  },
+  {
+    "description": "validation of float",
+    "schema": {"type": "number", "format": "float"},
+    "tests": [
+      {
+        "description": "256.1 is ok",
+        "data": 256.1,
+        "valid": true
+      },
+      {
+        "description": "non-numeric fails",
+        "data": "x",
+        "valid": false
+      }
+    ]
+  },
+  {
+    "description": "validation of double",
+    "schema": {"type": "number", "format": "double"},
+    "tests": [
+      {
+        "description": "256.1 is ok",
+        "data": 256.1,
+        "valid": true
+      },
+      {
+        "description": "non-numeric fails",
+        "data": "x",
+        "valid": false
+      }
+    ]
+  },
+  {
+    "description": "validation of password",
+    "schema": {"format": "password"},
+    "tests": [
+      {
+        "description": "'password string' is ok",
+        "data": "password string",
+        "valid": true
+      }
+    ]
+  },
+  {
+    "description": "validation of binary",
+    "schema": {"format": "binary"},
+    "tests": [
+      {
+        "description": "'binary string' is ok",
+        "data": "binary string",
+        "valid": true
+      }
+    ]
   }
 ]

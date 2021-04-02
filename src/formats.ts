@@ -21,6 +21,13 @@ export type FormatName =
   | "json-pointer"
   | "json-pointer-uri-fragment"
   | "relative-json-pointer"
+  | "byte"
+  | "int32"
+  | "int64"
+  | "float"
+  | "double"
+  | "password"
+  | "binary"
 
 export type DefinedFormats = {
   [key in FormatName]: Format
@@ -62,6 +69,21 @@ export const fullFormats: DefinedFormats = {
   "json-pointer-uri-fragment": /^#(?:\/(?:[a-z0-9_\-.!$&'()*+,;:=@]|%[0-9a-f]{2}|~0|~1)*)*$/i,
   // relative JSON-pointer: http://tools.ietf.org/html/draft-luff-relative-json-pointer-00
   "relative-json-pointer": /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/,
+  // the following formats are used by the openapi specification: https://spec.openapis.org/oas/v3.0.0#data-types
+  // byte: https://github.com/miguelmota/is-base64
+  byte: /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/gm,
+  // signed 32 bit integer
+  int32: {type: "number", validate: validateInt32},
+  // signed 64 bit integer
+  int64: {type: "number", validate: validateInt64},
+  // C-type float
+  float: {type: "number", validate: validateNumber},
+  // C-type double
+  double: {type: "number", validate: validateNumber},
+  // hint to the UI to hide input strings
+  password: true,
+  // unchecked string payload
+  binary: true,
 }
 
 export const fastFormats: DefinedFormats = {
@@ -167,6 +189,22 @@ const URI = /^(?:[a-z][a-z0-9+\-.]*:)(?:\/?\/(?:(?:[a-z0-9\-._~!$&'()*+,;=:]|%[0
 function uri(str: string): boolean {
   // http://jmrware.com/articles/2009/uri_regexp/URI_regex.html + optional protocol + required "."
   return NOT_URI_FRAGMENT.test(str) && URI.test(str)
+}
+
+const MIN_INT32 = -(2 ** 31)
+const MAX_INT32 = 2 ** 31 - 1
+
+function validateInt32(value: number): boolean {
+  return Number.isInteger(value) && value <= MAX_INT32 && value >= MIN_INT32
+}
+
+function validateInt64(value: number): boolean {
+  // JSON and javascript max Int is 2**53, so any int that passes isInteger is valid for Int64
+  return Number.isInteger(value)
+}
+
+function validateNumber(): boolean {
+  return true
 }
 
 const Z_ANCHOR = /[^\\]\\Z/
