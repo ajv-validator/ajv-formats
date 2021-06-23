@@ -106,6 +106,12 @@ export const fastFormats: DefinedFormats = {
   email: /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/i,
 }
 
+export const strictFormats: Partial<DefinedFormats> = {
+  // date-time: http://tools.ietf.org/html/rfc3339#section-5.6
+  time: fmtDef(strict_time, compareTime),
+  "date-time": fmtDef(strict_date_time, compareDateTime),
+}
+
 export const formatNames = Object.keys(fullFormats) as FormatName[]
 
 function isLeapYear(year: number): boolean {
@@ -139,8 +145,11 @@ function compareDate(d1: string, d2: string): number | undefined {
 }
 
 const TIME = /^(\d\d):(\d\d):(\d\d)(\.\d+)?(z|[+-]\d\d(?::?\d\d)?)?$/i
+const PLUS_MINUS = /^[+-]/
+const TIMEZONE = /^[Zz]$/
+const ISO_8601_TIME = /^[+-](?:[01][0-9]|2[0-4])(?::?[0-5][0-9])?$/
 
-function time(str: string, withTimeZone?: boolean): boolean {
+function time(str: string, withTimeZone?: boolean, strict?: boolean): boolean {
   const matches: string[] | null = TIME.exec(str)
   if (!matches) return false
 
@@ -151,8 +160,17 @@ function time(str: string, withTimeZone?: boolean): boolean {
   return (
     ((hour <= 23 && minute <= 59 && second <= 59) ||
       (hour === 23 && minute === 59 && second === 60)) &&
-    (!withTimeZone || timeZone !== "")
+    (!withTimeZone ||
+      (strict
+        ? TIMEZONE.test(timeZone) ||
+          (PLUS_MINUS.test(timeZone) && time(timeZone.slice(1) + ":00")) ||
+          ISO_8601_TIME.test(timeZone)
+        : timeZone !== ""))
   )
+}
+
+function strict_time(str: string, withTimeZone?: boolean): boolean {
+  return time(str, withTimeZone, true)
 }
 
 function compareTime(t1: string, t2: string): number | undefined {
@@ -172,6 +190,11 @@ function date_time(str: string): boolean {
   // http://tools.ietf.org/html/rfc3339#section-5.6
   const dateTime: string[] = str.split(DATE_TIME_SEPARATOR)
   return dateTime.length === 2 && date(dateTime[0]) && time(dateTime[1], true)
+}
+
+function strict_date_time(str: string): boolean {
+  const dateTime: string[] = str.split(DATE_TIME_SEPARATOR)
+  return dateTime.length === 2 && date(dateTime[0]) && strict_time(dateTime[1], true)
 }
 
 function compareDateTime(dt1: string, dt2: string): number | undefined {

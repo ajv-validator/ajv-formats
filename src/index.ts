@@ -5,6 +5,7 @@ import {
   formatNames,
   fastFormats,
   fullFormats,
+  strictFormats,
 } from "./formats"
 import formatLimit from "./limit"
 import type Ajv from "ajv"
@@ -17,6 +18,7 @@ export interface FormatOptions {
   mode?: FormatMode
   formats?: FormatName[]
   keywords?: boolean
+  strictDate?: boolean
 }
 
 export type FormatsPluginOptions = FormatName[] | FormatOptions
@@ -30,7 +32,7 @@ const fastName = new Name("fastFormats")
 
 const formatsPlugin: FormatsPlugin = (
   ajv: Ajv,
-  opts: FormatsPluginOptions = {keywords: true}
+  opts: FormatsPluginOptions = {keywords: true, strictDate: false}
 ): Ajv => {
   if (Array.isArray(opts)) {
     addFormats(ajv, opts, fullFormats, fullName)
@@ -39,7 +41,7 @@ const formatsPlugin: FormatsPlugin = (
   const [formats, exportName] =
     opts.mode === "fast" ? [fastFormats, fastName] : [fullFormats, fullName]
   const list = opts.formats || formatNames
-  addFormats(ajv, list, formats, exportName)
+  addFormats(ajv, list, opts.strictDate ? {...formats, ...strictFormats} : formats, exportName)
   if (opts.keywords) formatLimit(ajv)
   return ajv
 }
