@@ -75,7 +75,7 @@ export const fullFormats: DefinedFormats = {
   "relative-json-pointer": /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/,
   // the following formats are used by the openapi specification: https://spec.openapis.org/oas/v3.0.0#data-types
   // byte: https://github.com/miguelmota/is-base64
-  byte: /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/gm,
+  byte,
   // signed 32 bit integer
   int32: {type: "number", validate: validateInt32},
   // signed 64 bit integer
@@ -195,6 +195,13 @@ const URI =
 function uri(str: string): boolean {
   // http://jmrware.com/articles/2009/uri_regexp/URI_regex.html + optional protocol + required "."
   return NOT_URI_FRAGMENT.test(str) && URI.test(str)
+}
+
+const BYTE = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/gm
+
+function byte(str: string): boolean {
+  BYTE.lastIndex = 0
+  return BYTE.test(str)
 }
 
 const MIN_INT32 = -(2 ** 31)
