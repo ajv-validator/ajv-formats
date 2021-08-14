@@ -197,8 +197,10 @@ function uri(str: string): boolean {
   return NOT_URI_FRAGMENT.test(str) && URI.test(str)
 }
 
+const BYTE = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/gm
+
 function byte(str: string): boolean {
-  const BYTE = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/gm
+  BYTE.lastIndex = 0
   return BYTE.test(str)
 }
 
