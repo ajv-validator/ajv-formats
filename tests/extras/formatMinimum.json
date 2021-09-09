@@ -179,7 +179,7 @@
         "valid": false
       },
       {
-        "description": "same date, time before the minimum time is stillinvalid",
+        "description": "same date, time before the minimum time is still invalid",
         "data": "2015-08-17T10:33:55.000Z",
         "valid": false
       },

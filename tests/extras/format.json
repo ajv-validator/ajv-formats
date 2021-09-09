@@ -744,6 +744,11 @@
         "valid": true
       },
       {
+        "description": "second round multiline base64",
+        "data": "VGhpcyBpcyBhIGJhc2U2NCBtdWx0aWxpbmUgc3RyaW5nIHRoYXQgc3BhbnMgbW9yZSB0aGFuIDc2\nIGNoYXJhY3RlcnMgdG8gdGVzdCBtdWx0aWxpbmUgY2FwYWJpbGl0aWVzCg==",
+        "valid": true
+      },
+      {
         "description": "Invalid base64",
         "data": "aGVsbG8gd29ybG=",
         "valid": false
