@@ -105,10 +105,12 @@ addFormats(ajv, {mode: "fast"})
 or
 
 ```javascript
-addFormats(ajv, {mode: "fast", formats: ["date", "time"], keywords: true})
+addFormats(ajv, {mode: "fast", formats: ["date", "time"], keywords: true, strictTime: true})
 ```
 
 In `"fast"` mode the following formats are simplified: `"date"`, `"time"`, `"date-time"`, `"uri"`, `"uri-reference"`, `"email"`. For example `"date"`, `"time"` and `"date-time"` do not validate ranges in `"fast"` mode, only string structure, and other formats have simplified regular expressions.
+
+With `strictTime: true` option timezone becomes required in `time` and `date-time` formats, and (it also implies `full` mode for these formats).
 
 ## Tests
 
