@@ -149,33 +149,27 @@ function compareDate(d1: string, d2: string): number | undefined {
   return 0
 }
 
-const TIME = /^(\d\d):(\d\d):(\d\d)(\.\d+)?(z|[+-]\d\d(?::?\d\d)?)?$/i
-const PLUS_MINUS = /^[+-]/
-const TIMEZONE = /^[Zz]$/
-const ISO_8601_TIME = /^[+-](?:[01][0-9]|2[0-4])(?::?[0-5][0-9])?$/
+const TIME = /^(\d\d):(\d\d):(\d\d(?:\.\d+)?)(z|([+-]\d\d)(?::?(\d\d))?)?$/i
 
-function time(str: string, withTimeZone?: boolean, strict?: boolean): boolean {
+function time(str: string, withTimeZone?: boolean, strictTime?: boolean): boolean {
   const matches: string[] | null = TIME.exec(str)
   if (!matches) return false
-
-  const hour: number = +matches[1]
-  const minute: number = +matches[2]
-  const second: number = +matches[3]
-  const timeZone: string = matches[5]
+  const hr: number = +matches[1]
+  const min: number = +matches[2]
+  const sec: number = +matches[3]
+  const tz: string | undefined = matches[4]
+  const tzH: number = +(matches[5] || 0)
+  const tzM: number = +(matches[6] || 0)
   return (
-    ((hour <= 23 && minute <= 59 && second <= 59) ||
-      (hour === 23 && minute === 59 && second === 60)) &&
-    (!withTimeZone ||
-      (strict
-        ? TIMEZONE.test(timeZone) ||
-          (PLUS_MINUS.test(timeZone) && time(timeZone.slice(1) + ":00")) ||
-          ISO_8601_TIME.test(timeZone)
-        : timeZone !== ""))
+    ((hr <= 23 && min <= 59 && sec < 60 && tzH <= 24 && tzM < 60) ||
+      // leap second
+      (hr - tzH === 23 && min - tzM === 59 && sec < 61 && tzH <= 24 && tzM < 60)) &&
+    (!withTimeZone || (tz !== "" && (!strictTime || !!tz)))
   )
 }
 
-function strict_time(str: string, withTimeZone?: boolean): boolean {
-  return time(str, withTimeZone, true)
+function strict_time(str: string): boolean {
+  return time(str, true, true)
 }
 
 function compareTime(t1: string, t2: string): number | undefined {
@@ -183,23 +177,22 @@ function compareTime(t1: string, t2: string): number | undefined {
   const a1 = TIME.exec(t1)
   const a2 = TIME.exec(t2)
   if (!(a1 && a2)) return undefined
-  t1 = a1[1] + a1[2] + a1[3] + (a1[4] || "")
-  t2 = a2[1] + a2[2] + a2[3] + (a2[4] || "")
+  t1 = a1[1] + a1[2] + a1[3]
+  t2 = a2[1] + a2[2] + a2[3]
   if (t1 > t2) return 1
   if (t1 < t2) return -1
   return 0
 }
 
 const DATE_TIME_SEPARATOR = /t|\s/i
-function date_time(str: string): boolean {
+function date_time(str: string, strictTime?: boolean): boolean {
   // http://tools.ietf.org/html/rfc3339#section-5.6
   const dateTime: string[] = str.split(DATE_TIME_SEPARATOR)
-  return dateTime.length === 2 && date(dateTime[0]) && time(dateTime[1], true)
+  return dateTime.length === 2 && date(dateTime[0]) && time(dateTime[1], true, strictTime)
 }
 
 function strict_date_time(str: string): boolean {
-  const dateTime: string[] = str.split(DATE_TIME_SEPARATOR)
-  return dateTime.length === 2 && date(dateTime[0]) && strict_time(dateTime[1], true)
+  return date_time(str, true)
 }
 
 function compareDateTime(dt1: string, dt2: string): number | undefined {

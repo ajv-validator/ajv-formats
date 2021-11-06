@@ -2,9 +2,9 @@ import Ajv from "ajv"
 import addFormats from "../dist"
 
 const ajv = new Ajv({$data: true, strictTypes: false, formats: {allowedUnknown: true}})
-addFormats(ajv, {strictDate: true})
+addFormats(ajv, {mode: "full", strictTime: true})
 
-describe("strictDate option", () => {
+describe("strictTime option", () => {
   it("a valid date-time string with time offset", () => {
     expect(
       ajv.validate(
