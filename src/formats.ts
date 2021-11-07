@@ -48,8 +48,8 @@ export const fullFormats: DefinedFormats = {
   // date-time: http://tools.ietf.org/html/rfc3339#section-5.6
   time: fmtDef(getTime(true), compareTime),
   "date-time": fmtDef(getDateTime(true), compareDateTime),
-  "iso-time": fmtDef(getTime(), compareTime),
-  "iso-date-time": fmtDef(getDateTime(), compareDateTime),
+  "iso-time": fmtDef(getTime(), compareIsoTime),
+  "iso-date-time": fmtDef(getDateTime(), compareIsoDateTime),
   // duration: https://tools.ietf.org/html/rfc3339#appendix-A
   duration: /^P(?!$)((\d+Y)?(\d+M)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+S)?)?|(\d+W)?)$/,
   uri,
@@ -107,11 +107,11 @@ export const fastFormats: DefinedFormats = {
   ),
   "iso-time": fmtDef(
     /^(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)?$/i,
-    compareTime
+    compareIsoTime
   ),
   "iso-date-time": fmtDef(
     /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)?$/i,
-    compareDateTime
+    compareIsoDateTime
   ),
   // uri: https://github.com/mafintosh/is-my-json-valid/blob/master/formats.js
   uri: /^(?:[a-z][a-z0-9+\-.]*:)(?:\/?\/)?[^\s]*$/i,
@@ -177,7 +177,15 @@ function getTime(strictTimeZone?: boolean): (str: string) => boolean {
   }
 }
 
-function compareTime(t1: string, t2: string): number | undefined {
+function compareTime(s1: string, s2: string): number | undefined {
+  if (!(s1 && s2)) return undefined
+  const t1 = new Date("2020-01-01T" + s1).valueOf()
+  const t2 = new Date("2020-01-01T" + s2).valueOf()
+  if (!(t1 && t2)) return undefined
+  return t1 - t2
+}
+
+function compareIsoTime(t1: string, t2: string): number | undefined {
   if (!(t1 && t2)) return undefined
   const a1 = TIME.exec(t1)
   const a2 = TIME.exec(t2)
@@ -201,6 +209,14 @@ function getDateTime(strictTimeZone?: boolean): (str: string) => boolean {
 }
 
 function compareDateTime(dt1: string, dt2: string): number | undefined {
+  if (!(dt1 && dt2)) return undefined
+  const d1 = new Date(dt1).valueOf()
+  const d2 = new Date(dt2).valueOf()
+  if (!(d1 && d2)) return undefined
+  return d1 - d2
+}
+
+function compareIsoDateTime(dt1: string, dt2: string): number | undefined {
   if (!(dt1 && dt2)) return undefined
   const [d1, t1] = dt1.split(DATE_TIME_SEPARATOR)
   const [d2, t2] = dt2.split(DATE_TIME_SEPARATOR)

@@ -69,8 +69,18 @@
         "valid": true
       },
       {
-        "description": "boundary point is valid, timezone is ignored",
+        "description": "time before the minimum time is invalid, timezone is taken into account",
         "data": "13:15:17.000+01:00",
+        "valid": false
+      },
+      {
+        "description": "boundary point is valid, timezone is taken into account",
+        "data": "14:15:17.000+01:00",
+        "valid": true
+      },
+      {
+        "description": "time after the minimum time is valid, timezone is taken into account",
+        "data": "14:20:17.000+01:00",
         "valid": true
       },
       {
@@ -99,8 +109,8 @@
         "valid": false
       },
       {
-        "description": "boundary point is invalid, timezone is ignored",
-        "data": "13:15:17.000+01:00",
+        "description": "boundary point is invalid, timezone is taken into account",
+        "data": "14:15:17.000+01:00",
         "valid": false
       },
       {

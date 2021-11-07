@@ -69,9 +69,19 @@
         "valid": true
       },
       {
-        "description": "boundary point is valid, timezone is ignored",
+        "description": "time before the maximum time is valid, timezone is taken into account",
         "data": "13:15:17.000+01:00",
         "valid": true
+      },
+      {
+        "description": "boundary point is valid, timezone is taken into account",
+        "data": "14:15:17.000+01:00",
+        "valid": true
+      },
+      {
+        "description": "time after the maximum time is invalid, timezone is taken into account",
+        "data": "14:20:17.000+01:00",
+        "valid": false
       },
       {
         "description": "time before the maximum time is valid",
@@ -99,13 +109,8 @@
         "valid": false
       },
       {
-        "description": "boundary point is invalid, timezone is ignored",
-        "data": "13:15:17.000+01:00",
-        "valid": false
-      },
-      {
-        "description": "boundary point is invalid, no timezone is ok too",
-        "data": "13:15:17.000",
+        "description": "boundary point is invalid, timezone is taken into account",
+        "data": "14:15:17.000+01:00",
         "valid": false
       },
       {
