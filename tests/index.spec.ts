@@ -16,8 +16,8 @@ describe("addFormats options", () => {
     expect(validateDate("2020-09-35")).toEqual(false)
 
     const validateTime = ajv.compile({format: "time"})
-    expect(validateTime("17:27:38")).toEqual(true)
-    expect(validateDate("25:27:38")).toEqual(false)
+    expect(validateTime("17:27:38Z")).toEqual(true)
+    expect(validateDate("25:27:38Z")).toEqual(false)
 
     expect(() => ajv.compile({format: "date-time"})).toThrow()
     addFormats(ajv, ["date-time"])
@@ -32,8 +32,8 @@ describe("addFormats options", () => {
     expect(validateDate("2020-09")).toEqual(false)
 
     const validateTime = ajv.compile({format: "time"})
-    expect(validateTime("17:27:38")).toEqual(true)
-    expect(validateTime("25:27:38")).toEqual(true)
+    expect(validateTime("17:27:38Z")).toEqual(true)
+    expect(validateTime("25:27:38Z")).toEqual(true)
     expect(validateTime("17:27")).toEqual(false)
   })
 })

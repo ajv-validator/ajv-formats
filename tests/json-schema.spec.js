@@ -2,7 +2,7 @@ const jsonSchemaTest = require("json-schema-test")
 const Ajv = require("ajv").default
 const addFormats = require("../dist")
 
-jsonSchemaTest(getAjv(true), {
+jsonSchemaTest(getAjv(), {
   description: `JSON-Schema Test Suite formats`,
   suites: {
     "draft-07 formats": "./JSON-Schema-Test-Suite/tests/draft7/optional/format/*.json",
@@ -31,9 +31,9 @@ jsonSchemaTest(getAjv(), {
   cwd: __dirname,
 })
 
-function getAjv(strictTime) {
+function getAjv() {
   const ajv = new Ajv({$data: true, strictTypes: false, formats: {allowedUnknown: true}})
-  addFormats(ajv, {mode: "full", keywords: true, strictTime})
+  addFormats(ajv, {mode: "full", keywords: true})
   return ajv
 }
 
