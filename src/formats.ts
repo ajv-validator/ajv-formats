@@ -62,7 +62,7 @@ export const fullFormats: DefinedFormats = {
   hostname:
     /^(?=.{1,253}\.?$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[-0-9a-z]{0,61}[0-9a-z])?)*\.?$/i,
   // optimized https://www.safaribooksonline.com/library/view/regular-expressions-cookbook/9780596802837/ch07s16.html
-  ipv4: /^(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)$/,
+  ipv4: /^(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)$/,
   ipv6: /^((([0-9a-f]{1,4}:){7}([0-9a-f]{1,4}|:))|(([0-9a-f]{1,4}:){6}(:[0-9a-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9a-f]{1,4}:){5}(((:[0-9a-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9a-f]{1,4}:){4}(((:[0-9a-f]{1,4}){1,3})|((:[0-9a-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9a-f]{1,4}:){3}(((:[0-9a-f]{1,4}){1,4})|((:[0-9a-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9a-f]{1,4}:){2}(((:[0-9a-f]{1,4}){1,5})|((:[0-9a-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9a-f]{1,4}:){1}(((:[0-9a-f]{1,4}){1,6})|((:[0-9a-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9a-f]{1,4}){1,7})|((:[0-9a-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))$/i,
   regex,
   // uuid: http://tools.ietf.org/html/rfc4122
@@ -149,7 +149,7 @@ function compareDate(d1: string, d2: string): number | undefined {
   return 0
 }
 
-const TIME = /^(\d\d):(\d\d):(\d\d(?:\.\d+)?)(z|([+-]\d\d)(?::?(\d\d))?)?$/i
+const TIME = /^(\d\d):(\d\d):(\d\d(?:\.\d+)?)(z|([+-])(\d\d)(?::?(\d\d))?)?$/i
 
 function time(str: string, withTimeZone?: boolean, strictTime?: boolean): boolean {
   const matches: string[] | null = TIME.exec(str)
@@ -158,14 +158,15 @@ function time(str: string, withTimeZone?: boolean, strictTime?: boolean): boolea
   const min: number = +matches[2]
   const sec: number = +matches[3]
   const tz: string | undefined = matches[4]
-  const tzH: number = +(matches[5] || 0)
-  const tzM: number = +(matches[6] || 0)
-  return (
-    ((hr <= 23 && min <= 59 && sec < 60 && tzH <= 24 && tzM < 60) ||
-      // leap second
-      (hr - tzH === 23 && min - tzM === 59 && sec < 61 && tzH <= 24 && tzM < 60)) &&
-    (!withTimeZone || (tz !== "" && (!strictTime || !!tz)))
-  )
+  const tzSign: number = matches[5] === "-" ? -1 : 1
+  const tzH: number = +(matches[6] || 0)
+  const tzM: number = +(matches[7] || 0)
+  if (tzH > 23 || tzM > 59 || (withTimeZone && (tz === "" || (strictTime && !tz)))) return false
+  if (hr <= 23 && min <= 59 && sec < 60) return true
+  // leap second
+  const utcMin = min - tzM * tzSign
+  const utcHr = hr - tzH * tzSign - (utcMin < 0 ? 1 : 0)
+  return (utcHr === 23 || utcHr === -1) && (utcMin === 59 || utcMin === -1) && sec < 61
 }
 
 function strict_time(str: string): boolean {
