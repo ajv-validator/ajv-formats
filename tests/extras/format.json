@@ -524,36 +524,36 @@
     ]
   },
   {
-    "description": "validation of time strings",
-    "schema": {"format": "time"},
+    "description": "validation of iso-time strings",
+    "schema": {"format": "iso-time"},
     "tests": [
       {
-        "description": "a valid time",
+        "description": "a valid iso-time",
         "data": "12:34:56",
         "valid": true
       },
       {
-        "description": "a valid time with milliseconds",
+        "description": "a valid iso-time with milliseconds",
         "data": "12:34:56.789",
         "valid": true
       },
       {
-        "description": "a valid time with timezone",
+        "description": "a valid iso-time with timezone",
         "data": "12:34:56+01:00",
         "valid": true
       },
       {
-        "description": "an invalid time format",
+        "description": "an invalid iso-time format",
         "data": "12.34.56",
         "valid": false
       },
       {
-        "description": "an invalid time",
+        "description": "an invalid iso-time",
         "data": "12:34:67",
         "valid": false
       },
       {
-        "description": "a valid time (leap second)",
+        "description": "a valid iso-time (leap second)",
         "data": "23:59:60",
         "valid": true
       }
@@ -561,15 +561,20 @@
   },
   {
     "description": "validation of date-time strings",
-    "schema": {"format": "date-time"},
+    "schema": {"format": "iso-date-time"},
     "tests": [
       {
-        "description": "a valid date-time string",
+        "description": "a valid iso-date-time string",
         "data": "1963-06-19T12:13:14Z",
         "valid": true
       },
       {
-        "description": "an invalid date-time string (no time)",
+        "description": "a valid iso-date-time string without timezone",
+        "data": "1963-06-19T12:13:14",
+        "valid": true
+      },
+      {
+        "description": "an invalid iso-date-time string (no time)",
         "data": "1963-06-19",
         "valid": false
       },
@@ -579,17 +584,17 @@
         "valid": false
       },
       {
-        "description": "an invalid date-time string (invalid date)",
+        "description": "an invalid iso-date-time string (invalid date)",
         "data": "1963-20-19T12:13:14Z",
         "valid": false
       },
       {
-        "description": "an invalid date-time string (invalid time)",
+        "description": "an invalid iso-date-time string (invalid time)",
         "data": "1963-06-19T12:13:67Z",
         "valid": false
       },
       {
-        "description": "a valid date-time string (leap second)",
+        "description": "a valid iso-date-time string (leap second)",
         "data": "2016-12-31T23:59:60Z",
         "valid": true
       }
