@@ -95,7 +95,7 @@ addFormats(ajv, ["date", "time"])
 **Please note**: when ajv encounters an undefined format it throws exception (unless ajv instance was configured with `strict: false` option). To allow specific undefined formats they have to be passed to ajv instance via `formats` option with `true` value:
 
 ```javascript
-const ajv = new Ajv((formats: {date: true, time: true})) // to ignore "date" and "time" formats in schemas.
+const ajv = new Ajv({formats: {date: true, time: true}}) // to ignore "date" and "time" formats in schemas.
 ```
 
 2. Format validation mode (default is `"full"`) with optional list of format names and `keywords` option to add additional format comparison keywords:
