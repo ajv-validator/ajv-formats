@@ -102,7 +102,7 @@ export const fastFormats: DefinedFormats = {
     compareTime
   ),
   "date-time": fmtDef(
-    /^\d\d\d\d-[0-1]\d-[0-3]\dt(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)$/i,
+    /^\d\d\d\d-[0-1]\d-[0-3]\d[tT](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:[zZ]|[+-][0-2]\d:[0-5]\d)$/,
     compareDateTime
   ),
   "iso-time": fmtDef(
@@ -197,7 +197,7 @@ function compareIsoTime(t1: string, t2: string): number | undefined {
   return 0
 }
 
-const DATE_TIME_SEPARATOR = /t|\s/i
+const DATE_TIME_SEPARATOR = /t|T/i
 function getDateTime(strictTimeZone?: boolean): (str: string) => boolean {
   const time = getTime(strictTimeZone)
 
