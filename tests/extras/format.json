@@ -597,6 +597,11 @@
         "description": "a valid iso-date-time string (leap second)",
         "data": "2016-12-31T23:59:60Z",
         "valid": true
+      },
+      {
+        "description": "an invalid iso-date-time string (space separator)",
+        "data": "2016-12-31 23:59:60Z",
+        "valid": false
       }
     ]
   },

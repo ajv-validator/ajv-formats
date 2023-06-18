@@ -197,7 +197,7 @@ function compareIsoTime(t1: string, t2: string): number | undefined {
   return 0
 }
 
-const DATE_TIME_SEPARATOR = /t|T/i
+const DATE_TIME_SEPARATOR = /t/i
 function getDateTime(strictTimeZone?: boolean): (str: string) => boolean {
   const time = getTime(strictTimeZone)
 

@@ -25,7 +25,7 @@ describe("addFormats options", () => {
   })
 
   test("should support validation mode", () => {
-    addFormats(ajv, {mode: "fast", formats: ["date", "time"]})
+    addFormats(ajv, {mode: "fast", formats: ["date", "time", "date-time"]})
     const validateDate = ajv.compile({format: "date"})
     expect(validateDate("2020-09-17")).toEqual(true)
     expect(validateDate("2020-09-35")).toEqual(true)
@@ -35,6 +35,11 @@ describe("addFormats options", () => {
     expect(validateTime("17:27:38Z")).toEqual(true)
     expect(validateTime("25:27:38Z")).toEqual(true)
     expect(validateTime("17:27")).toEqual(false)
+
+    const validateDatetime = ajv.compile({format: "date-time"})
+    expect(validateDatetime("2016-12-31T23:59:60Z")).toEqual(true)
+    expect(validateDatetime("2016-15-31T23:59:60Z")).toEqual(true)
+    expect(validateDatetime("2016-12-31 23:59:60Z")).toEqual(false)
   })
 })
 
