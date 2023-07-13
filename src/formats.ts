@@ -102,7 +102,7 @@ export const fastFormats: DefinedFormats = {
     compareTime
   ),
   "date-time": fmtDef(
-    /^\d\d\d\d-[0-1]\d-[0-3]\d[tT](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:[zZ]|[+-][0-2]\d:[0-5]\d)$/,
+    /^\d\d\d\d-((0[1-9])|(1[0-2]))-((0[1-9])|([1-2]\d)|(3[01]))[tT](?:(([0-1]\d)|(2[0-3])):[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:[zZ]|[+-](([0-1]\d)|(2[0-3])):[0-5]\d)$/,
     compareDateTime
   ),
   "iso-time": fmtDef(
