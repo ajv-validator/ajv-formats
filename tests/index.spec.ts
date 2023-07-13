@@ -46,7 +46,7 @@ describe("addFormats options", () => {
     expect(validateDatetime("2023-05-04T01:14:10+16:20")).toEqual(true)
     expect(validateDatetime("2023-05-04T01:14:21+09:50")).toEqual(true)
     expect(validateDatetime("2023-05-04T01:14:21-04:31")).toEqual(true)
-    expect(validateDatetime("2023-05-04T01:14:21-04:31")).toEqual(true)
+    expect(validateDatetime("2023-05-04T01:14:21-23:59")).toEqual(true)
     expect(validateDatetime("2016-15-31T23:59:60Z")).toEqual(false)
     expect(validateDatetime("2015-00-11t22:59:22+00:00")).toEqual(false)
     expect(validateDatetime("2015-01-00T22:59:22+00:00")).toEqual(false)
