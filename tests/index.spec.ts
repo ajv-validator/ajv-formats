@@ -25,7 +25,7 @@ describe("addFormats options", () => {
   })
 
   test("should support validation mode", () => {
-    addFormats(ajv, {mode: "fast", formats: ["date", "time", "date-time"]})
+    addFormats(ajv, {mode: "fast", formats: ["date", "time", "date-time", "iso-date-time"]})
     const validateDate = ajv.compile({format: "date"})
     expect(validateDate("2020-09-17")).toEqual(true)
     expect(validateDate("2020-09-35")).toEqual(true)
@@ -60,6 +60,10 @@ describe("addFormats options", () => {
     expect(validateDatetime("2023-05-04\n01:14:21+09:50")).toEqual(false)
     expect(validateDatetime("2023-05-04\n01:14:21-04:31")).toEqual(false)
     expect(validateDatetime("2023-05-04t01:14:21-04:31:00")).toEqual(false)
+
+    const validateIsoDatetime = ajv.compile({format: "iso-date-time"})
+    expect(validateIsoDatetime("2016-12-31 23:59:60Z")).toEqual(true)
+    expect(validateIsoDatetime("2016-13-31 23:59:60Z")).toEqual(false)
   })
 })
 
