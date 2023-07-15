@@ -720,8 +720,8 @@
         "valid": false
       },
       {
-        "description": "",
-        "data": "2023-05-04t01:14:21-04:31:00 (invalid time-offset)",
+        "description": "an invalid date-time string (invalid time-offset)",
+        "data": "2023-05-04t01:14:21-04:31:00",
         "valid": false
       }
     ]
