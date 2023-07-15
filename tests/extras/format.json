@@ -631,7 +631,7 @@
       },
       {
         "description": "a valid date-time string",
-        "data": "2020-01-01T20:00:00.000Z",
+        "data": "2020-01-01T20:00:00.000-00:00",
         "valid": true
       },
       {
