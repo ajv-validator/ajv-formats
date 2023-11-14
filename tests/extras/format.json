@@ -875,5 +875,31 @@
         "valid": true
       }
     ]
+  },
+  {
+    "description": "validation of duration strings",
+    "schema": {"format": "duration"},
+    "tests": [
+      {
+        "description": "a valid duration string",
+        "data": "PT1M3S",
+        "valid": true
+      },
+      {
+        "description": "a valid negative duration string",
+        "data": "-PT2S",
+        "valid": true
+      },
+      {
+        "description": "a valid negative duration string with inline minus",
+        "data": "PT-2S",
+        "valid": true
+      },
+      {
+        "description": "an invalid duration string",
+        "data": "P1M3S",
+        "valid": false
+      }
+    ]
   }
 ]
