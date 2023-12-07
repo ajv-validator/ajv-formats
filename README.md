@@ -11,11 +11,11 @@ JSON Schema formats for Ajv
 
 ```javascript
 // ESM/TypeScript import
-import Ajv from "ajv"
-import addFormats from "ajv-formats"
+import {Ajv} from "ajv"
+import {addFormats} from "ajv-formats"
 // Node.js require:
-const Ajv = require("ajv")
-const addFormats = require("ajv-formats")
+const {Ajv} = require("ajv")
+const {addFormats} = require("ajv-formats")
 
 const ajv = new Ajv()
 addFormats(ajv)
