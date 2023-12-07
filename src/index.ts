@@ -33,13 +33,13 @@ const formatsPlugin: FormatsPlugin = (
   opts: FormatsPluginOptions = {keywords: true}
 ): Ajv => {
   if (Array.isArray(opts)) {
-    addFormats(ajv, opts, fullFormats, fullName)
+    _addFormats(ajv, opts, fullFormats, fullName)
     return ajv
   }
   const [formats, exportName] =
     opts.mode === "fast" ? [fastFormats, fastName] : [fullFormats, fullName]
   const list = opts.formats || formatNames
-  addFormats(ajv, list, formats, exportName)
+  _addFormats(ajv, list, formats, exportName)
   if (opts.keywords) formatLimit(ajv)
   return ajv
 }
@@ -51,7 +51,7 @@ formatsPlugin.get = (name: FormatName, mode: FormatMode = "full"): Format => {
   return f
 }
 
-function addFormats(ajv: Ajv, list: FormatName[], fs: DefinedFormats, exportName: Name): void {
+function _addFormats(ajv: Ajv, list: FormatName[], fs: DefinedFormats, exportName: Name): void {
   ajv.opts.code.formats ??= _`require("ajv-formats/dist/formats").${exportName}`
   for (const f of list) ajv.addFormat(f, fs[f])
 }
@@ -60,3 +60,4 @@ module.exports = exports = formatsPlugin
 Object.defineProperty(exports, "__esModule", {value: true})
 
 export default formatsPlugin
+export const addFormats = formatsPlugin
