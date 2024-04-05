@@ -1,6 +1,6 @@
 {
   "name": "ajv-formats",
-  "version": "3.0.0-rc.0",
+  "version": "3.0.1",
   "description": "Format validation for Ajv v7+",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
