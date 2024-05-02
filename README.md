@@ -63,7 +63,7 @@ These keywords are added to ajv instance when ajv-formats is used without option
 
 These keywords apply only to strings. If the data is not a string, the validation succeeds.
 
-The value of keywords `formatMaximum`/`formatMinimum` and `formatExclusiveMaximum`/`formatExclusiveMinimum` should be a string or [\$data reference](https://github.com/ajv-validator/ajv/blob/master/docs/validation.md#data-reference). This value is the maximum (minimum) allowed value for the data to be valid as determined by `format` keyword. If `format` keyword is not present schema compilation will throw exception.
+The value of keywords `formatMaximum`/`formatMinimum` and `formatExclusiveMaximum`/`formatExclusiveMinimum` should be a string or [$data reference](https://github.com/ajv-validator/ajv/blob/master/docs/guide/combining-schemas.md#data-reference). This value is the maximum (minimum) allowed value for the data to be valid as determined by `format` keyword. If `format` keyword is not present schema compilation will throw exception.
 
 When these keyword are added, they also add comparison functions to formats `"date"`, `"time"` and `"date-time"`. User-defined formats also can have comparison functions. See [addFormat](https://github.com/ajv-validator/ajv/blob/master/docs/api.md#api-addformat) method.
 
@@ -95,7 +95,7 @@ addFormats(ajv, ["date", "time"])
 **Please note**: when ajv encounters an undefined format it throws exception (unless ajv instance was configured with `strict: false` option). To allow specific undefined formats they have to be passed to ajv instance via `formats` option with `true` value:
 
 ```javascript
-const ajv = new Ajv((formats: {date: true, time: true})) // to ignore "date" and "time" formats in schemas.
+const ajv = new Ajv({formats: {date: true, time: true}}) // to ignore "date" and "time" formats in schemas.
 ```
 
 2. Format validation mode (default is `"full"`) with optional list of format names and `keywords` option to add additional format comparison keywords:
