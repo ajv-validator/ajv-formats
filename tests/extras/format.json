@@ -560,7 +560,7 @@
     ]
   },
   {
-    "description": "validation of date-time strings",
+    "description": "validation of iso-date-time strings",
     "schema": {"format": "iso-date-time"},
     "tests": [
       {
@@ -597,6 +597,132 @@
         "description": "a valid iso-date-time string (leap second)",
         "data": "2016-12-31T23:59:60Z",
         "valid": true
+      },
+      {
+        "description": "a valid iso-date-time string (space separator)",
+        "data": "2016-12-31 23:59:60Z",
+        "valid": true
+      }
+    ]
+  },
+  {
+    "description": "validation of date-time strings",
+    "schema": {"format": "date-time"},
+    "tests": [
+      {
+        "description": "a valid date-time string",
+        "data": "2016-12-31T23:59:60Z",
+        "valid": true
+      },
+      {
+        "description": "a valid date-time string",
+        "data": "2015-12-31t23:59:60Z",
+        "valid": true
+      },
+      {
+        "description": "a valid date-time string",
+        "data": "2015-02-11t22:59:22Z",
+        "valid": true
+      },
+      {
+        "description": "a valid date-time string",
+        "data": "2020-01-01T20:00:00.000Z",
+        "valid": true
+      },
+      {
+        "description": "a valid date-time string",
+        "data": "2020-01-01T20:00:00.000-00:00",
+        "valid": true
+      },
+      {
+        "description": "a valid date-time string",
+        "data": "2023-05-04T01:14:00+21:00",
+        "valid": true
+      },
+      {
+        "description": "a valid date-time string",
+        "data": "2023-05-04T01:14:10+16:20",
+        "valid": true
+      },
+      {
+        "description": "a valid date-time string",
+        "data": "2023-05-04T01:14:21+09:50",
+        "valid": true
+      },
+      {
+        "description": "a valid date-time string",
+        "data": "2023-05-04T01:14:21-04:31",
+        "valid": true
+      },
+      {
+        "description": "a valid date-time string",
+        "data": "2023-05-04T01:14:21-23:59",
+        "valid": true
+      },
+      {
+        "description": "an invalid date-time string (invalid month)",
+        "data": "2016-15-31T23:59:60Z",
+        "valid": false
+      },
+      {
+        "description": "an invalid date-time string (invalid month)",
+        "data": "2015-00-11t22:59:22+00:00",
+        "valid": false
+      },
+      {
+        "description": "an invalid date-time string (invalid day)",
+        "data": "2015-01-00T22:59:22+00:00",
+        "valid": false
+      },
+      {
+        "description": "an invalid date-time string (invalid separator)",
+        "data": "2016-12-31 23:59:60Z",
+        "valid": false
+      },
+      {
+        "description": "an invalid date-time string (invalid time)",
+        "data": "2015-02-11t24:59:22Z",
+        "valid": false
+      },
+      {
+        "description": "an invalid date-time string (invalid separator and time-offset)",
+        "data": "2020-01-01 20:00:00.000",
+        "valid": false
+      },
+      {
+        "description": "an invalid date-time string (invalid separator)",
+        "data": "2020-01-01 20:00:00.000Z",
+        "valid": false
+      },
+      {
+        "description": "an invalid date-time string (invalid separator)",
+        "data": "2023-05-04\t01:14:00+21:00",
+        "valid": false
+      },
+      {
+        "description": "an invalid date-time string (invalid separator)",
+        "data": "2023-05-04\r01:14:10+16:20",
+        "valid": false
+      },
+      {
+        "description": "an invalid date-time string (invalid timezone)",
+        "data": "2015-02-11t22:59:22+24:30",
+        "valid": false
+      },
+      {
+        "description": "an invalid date-time string (invalid separator)",
+        "data": "2023-05-04\n01:14:21+09:50",
+        "valid": false
+      },
+      {
+        "description": "an invalid date-time string (invalid separator)",
+        "data": "2023-05-04\n01:14:21-04:31",
+        "valid": false
+      },
+      {
+        "description": "an invalid date-time string (invalid time-offset)",
+        "data": "2023-05-04t01:14:21-04:31:00",
+        "valid": false
       }
     ]
   },

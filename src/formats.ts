@@ -47,9 +47,9 @@ export const fullFormats: DefinedFormats = {
   date: fmtDef(date, compareDate),
   // date-time: http://tools.ietf.org/html/rfc3339#section-5.6
   time: fmtDef(getTime(true), compareTime),
-  "date-time": fmtDef(getDateTime(true), compareDateTime),
+  "date-time": fmtDef(getDateTime(), compareDateTime),
   "iso-time": fmtDef(getTime(), compareIsoTime),
-  "iso-date-time": fmtDef(getDateTime(), compareIsoDateTime),
+  "iso-date-time": fmtDef(getDateTime(true), compareIsoDateTime),
   // duration: https://tools.ietf.org/html/rfc3339#appendix-A
   duration: /^P(?!$)((\d+Y)?(\d+M)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+S)?)?|(\d+W)?)$/,
   uri,
@@ -102,7 +102,7 @@ export const fastFormats: DefinedFormats = {
     compareTime
   ),
   "date-time": fmtDef(
-    /^\d\d\d\d-[0-1]\d-[0-3]\dt(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)$/i,
+    /^\d\d\d\d-((0[1-9])|(1[0-2]))-((0[1-9])|([1-2]\d)|(3[01]))[tT](?:(([0-1]\d)|(2[0-3])):[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:[zZ]|[+-](([0-1]\d)|(2[0-3])):[0-5]\d)$/,
     compareDateTime
   ),
   "iso-time": fmtDef(
@@ -110,7 +110,7 @@ export const fastFormats: DefinedFormats = {
     compareIsoTime
   ),
   "iso-date-time": fmtDef(
-    /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)?$/i,
+    /^\d\d\d\d-((0[1-9])|(1[0-2]))-((0[1-9])|([1-2]\d)|(3[01]))[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)?$/i,
     compareIsoDateTime
   ),
   // uri: https://github.com/mafintosh/is-my-json-valid/blob/master/formats.js
@@ -197,13 +197,14 @@ function compareIsoTime(t1: string, t2: string): number | undefined {
   return 0
 }
 
-const DATE_TIME_SEPARATOR = /t|\s/i
-function getDateTime(strictTimeZone?: boolean): (str: string) => boolean {
-  const time = getTime(strictTimeZone)
+const DATE_TIME_SEPARATOR = /t/i
+const ISO_DATE_TIME_SEPARATOR = /t|\s/i
+function getDateTime(iso?: boolean): (str: string) => boolean {
+  const time = getTime(!iso)
 
   return function date_time(str: string): boolean {
     // http://tools.ietf.org/html/rfc3339#section-5.6
-    const dateTime: string[] = str.split(DATE_TIME_SEPARATOR)
+    const dateTime: string[] = str.split(iso ? ISO_DATE_TIME_SEPARATOR : DATE_TIME_SEPARATOR)
     return dateTime.length === 2 && date(dateTime[0]) && time(dateTime[1])
   }
 }
@@ -218,8 +219,8 @@ function compareDateTime(dt1: string, dt2: string): number | undefined {
 
 function compareIsoDateTime(dt1: string, dt2: string): number | undefined {
   if (!(dt1 && dt2)) return undefined
-  const [d1, t1] = dt1.split(DATE_TIME_SEPARATOR)
-  const [d2, t2] = dt2.split(DATE_TIME_SEPARATOR)
+  const [d1, t1] = dt1.split(ISO_DATE_TIME_SEPARATOR)
+  const [d2, t2] = dt2.split(ISO_DATE_TIME_SEPARATOR)
   const res = compareDate(d1, d2)
   if (res === undefined) return undefined
   return res || compareTime(t1, t2)
