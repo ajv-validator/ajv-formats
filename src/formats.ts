@@ -43,6 +43,7 @@ function fmtDef(
 }
 
 export const fullFormats: DefinedFormats = {
+  boolean: /^(true|false|0|1|yes|no|enabled|disabled|on|off)$/i,
   // date: http://tools.ietf.org/html/rfc3339#section-5.6
   date: fmtDef(date, compareDate),
   // date-time: http://tools.ietf.org/html/rfc3339#section-5.6
