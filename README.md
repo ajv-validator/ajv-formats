@@ -40,6 +40,7 @@ The package defines these formats:
 - _ipv4_: IP address v4.
 - _ipv6_: IP address v6.
 - _regex_: tests whether a string is a valid regular expression by passing it to RegExp constructor.
+- _ulid_: Universally Unique Lexicographically Sortable Identifier according to [GitHub ulid/spec](https://github.com/ulid/spec)
 - _uuid_: Universally Unique IDentifier according to [RFC4122](http://tools.ietf.org/html/rfc4122).
 - _json-pointer_: JSON-pointer according to [RFC6901](https://tools.ietf.org/html/rfc6901).
 - _relative-json-pointer_: relative JSON-pointer according to [this draft](http://tools.ietf.org/html/draft-luff-relative-json-pointer-00).

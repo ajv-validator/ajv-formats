@@ -601,6 +601,47 @@
     ]
   },
   {
+    "description": "validation of ulid strings",
+    "schema": {"format": "ulid"},
+    "tests": [
+      {
+        "description": "a valid ulid",
+        "data": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+        "valid": true
+      },
+      {
+        "description": "not valid ulid as it is too long",
+        "data": "01ARZ3NDEKTSV4RRFFQ69G5FAVA",
+        "valid": false
+      },
+      {
+        "description": "not valid ulid as it is too short",
+        "data": "01ARZ3NDEKTSV4RRFFQ69G5FA",
+        "valid": false
+      },
+      {
+        "description": "not valid ulid as it has a lower case character",
+        "data": "01ARZ3NDEKTSV4rRFFQ69G5FAV",
+        "valid": false
+      },
+      {
+        "description": "not valid ulid as it has a hyphen",
+        "data": "01ARZ3NDEKTSV4-RFFQ69G5FAV",
+        "valid": false
+      },
+      {
+        "description": "not valid ulid as it starts with an 8",
+        "data": "81ARZ3NDEKTSV4RRFIQ69G5FAV",
+        "valid": false
+      },
+      {
+        "description": "not valid ulid as it has an I",
+        "data": "01ARZ3NDEKTSV4IRFIQ69G5FAV",
+        "valid": false
+      }
+    ]
+  },
+  {
     "description": "validation of uuid strings",
     "schema": {"format": "uuid"},
     "tests": [
