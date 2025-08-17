@@ -30,6 +30,7 @@ export type FormatName =
   | "double"
   | "password"
   | "binary"
+  | "mac-address"
 
 export type DefinedFormats = {
   [key in FormatName]: Format
@@ -92,6 +93,8 @@ export const fullFormats: DefinedFormats = {
   password: true,
   // unchecked string payload
   binary: true,
+  // mac-address: https://datatracker.ietf.org/doc/html/rfc9542
+  "mac-address": /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/,
 }
 
 export const fastFormats: DefinedFormats = {

@@ -875,5 +875,21 @@
         "valid": true
       }
     ]
+  },
+  {
+    "description": "validation of mac address",
+    "schema": {"format": "mac-address"},
+    "tests": [
+      {
+        "description": "'mac-address string' is ok",
+        "data": "00:1A:2B:3C:4D:5E",
+        "valid": true
+      },
+      {
+        "description": "'mac-address string' is ok",
+        "data": "00:1A:2B:",
+        "valid": false
+      }
+    ]
   }
 ]
