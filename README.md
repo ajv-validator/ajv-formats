@@ -19,6 +19,12 @@ const addFormats = require("ajv-formats")
 
 const ajv = new Ajv()
 addFormats(ajv)
+
+// In Node.js /ESM with typescript support:
+import Ajv from "ajv"
+import * as addFormats from "ajv-formats"
+const ajv = new Ajv()
+;(addFormats.default as any)(ajv)
 ```
 
 ## Formats
