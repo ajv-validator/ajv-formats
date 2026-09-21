@@ -36,6 +36,16 @@ describe("addFormats options", () => {
     expect(validateTime("25:27:38Z")).toEqual(true)
     expect(validateTime("17:27")).toEqual(false)
   })
+
+  test("should reject duration components out of order", () => {
+    addFormats(ajv, ["duration"])
+    const validateDuration = ajv.compile({format: "duration"})
+    expect(validateDuration("P1Y2D")).toEqual(false)
+    expect(validateDuration("PT1H2S")).toEqual(false)
+    expect(validateDuration("P1Y0M2D")).toEqual(true)
+    expect(validateDuration("PT1H0M2S")).toEqual(true)
+    expect(validateDuration("P1Y2M3DT4H5M6S")).toEqual(true)
+  })
 })
 
 describe("method get", () => {
