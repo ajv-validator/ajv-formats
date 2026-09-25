@@ -97,12 +97,9 @@ export const fullFormats: DefinedFormats = {
 export const fastFormats: DefinedFormats = {
   ...fullFormats,
   date: fmtDef(/^\d\d\d\d-[0-1]\d-[0-3]\d$/, compareDate),
-  time: fmtDef(
-    /^(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)$/i,
-    compareTime
-  ),
+  time: fmtDef(/^(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d:\d\d)$/i, compareTime),
   "date-time": fmtDef(
-    /^\d\d\d\d-[0-1]\d-[0-3]\dt(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)$/i,
+    /^\d\d\d\d-[0-1]\d-[0-3]\dt(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d:\d\d)$/i,
     compareDateTime
   ),
   "iso-time": fmtDef(
@@ -155,11 +152,20 @@ function compareDate(d1: string, d2: string): number | undefined {
   return 0
 }
 
+// time-numoffset = ("+" / "-") time-hour ":" time-minute -- the colon and
+// the minutes are both mandatory literals in the normative RFC 3339 §5.6
+// grammar (https://www.rfc-editor.org/rfc/rfc3339#section-5.6). Used for the
+// strict "time"/"date-time" formats.
+const STRICT_TIME = /^(\d\d):(\d\d):(\d\d(?:\.\d+)?)(z|([+-])(\d\d):(\d\d))?$/i
+// The more permissive ISO 8601 Appendix A offset forms (colon and minutes
+// both optional, e.g. "+01" or "+0130") that ajv-validator/ajv#1061 added
+// for "iso-time"/"iso-date-time"; see https://www.rfc-editor.org/rfc/rfc3339#appendix-A
 const TIME = /^(\d\d):(\d\d):(\d\d(?:\.\d+)?)(z|([+-])(\d\d)(?::?(\d\d))?)?$/i
 
 function getTime(strictTimeZone?: boolean): (str: string) => boolean {
   return function time(str: string): boolean {
-    const matches: string[] | null = TIME.exec(str)
+    const timeRegex = strictTimeZone ? STRICT_TIME : TIME
+    const matches: string[] | null = timeRegex.exec(str)
     if (!matches) return false
     const hr: number = +matches[1]
     const min: number = +matches[2]

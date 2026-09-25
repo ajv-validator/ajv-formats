@@ -1,71 +1,153 @@
 [
   {
-    "description": "Support for alternative ISO-8601 timezone offset formats (#1061)",
+    "description": "RFC 3339 §5.6 requires the colon and the minutes in a numeric time-numoffset for date-time (ajv-formats#117, #104). This supersedes the date-time cases from #1061 below, which were only ever valid under the non-normative ISO 8601 Appendix A grammar; see the iso-date-time block further down for those.",
     "schema": {"format": "date-time"},
     "tests": [
       {
-        "description": "valid positive two digit",
+        "description": "invalid: numeric offset missing the minutes component",
         "data": "2016-01-31T02:31:17+01",
-        "valid": true
+        "valid": false
       },
       {
-        "description": "valid negative two digit",
+        "description": "invalid: numeric offset missing the minutes component (negative)",
         "data": "2016-01-31T02:31:17-01",
-        "valid": true
+        "valid": false
       },
       {
-        "description": "valid positive four digit no colon",
+        "description": "invalid: numeric offset missing the colon separator",
         "data": "2016-01-31T02:31:17+0130",
-        "valid": true
+        "valid": false
       },
       {
-        "description": "valid negative four digit no colon",
+        "description": "invalid: numeric offset missing the colon separator (negative)",
         "data": "2016-01-31T02:31:17-0130",
-        "valid": true
+        "valid": false
       },
       {
-        "description": "invalid positive three digit no colon",
+        "description": "invalid: malformed three digit offset without colon",
         "data": "2016-01-31T02:31:17+013",
         "valid": false
       },
       {
-        "description": "invalid negative three digit no colon",
+        "description": "invalid: malformed three digit offset without colon (negative)",
+        "data": "2016-01-31T02:31:17-013",
+        "valid": false
+      },
+      {
+        "description": "valid: fully-formed numeric offset with colon and minutes",
+        "data": "2016-01-31T02:31:17+01:30",
+        "valid": true
+      }
+    ]
+  },
+  {
+    "description": "RFC 3339 §5.6 requires the colon and the minutes in a numeric time-numoffset for time (ajv-formats#117, #104). This supersedes the time cases from #1061 below, which were only ever valid under the non-normative ISO 8601 Appendix A grammar; see the iso-time block further down for those.",
+    "schema": {"format": "time"},
+    "tests": [
+      {
+        "description": "invalid: numeric offset missing the minutes component",
+        "data": "02:31:17+01",
+        "valid": false
+      },
+      {
+        "description": "invalid: numeric offset missing the minutes component (negative)",
+        "data": "02:31:17-01",
+        "valid": false
+      },
+      {
+        "description": "invalid: numeric offset missing the colon separator",
+        "data": "02:31:17+0130",
+        "valid": false
+      },
+      {
+        "description": "invalid: numeric offset missing the colon separator (negative)",
+        "data": "02:31:17-0130",
+        "valid": false
+      },
+      {
+        "description": "invalid: malformed three digit offset without colon",
+        "data": "02:31:17+013",
+        "valid": false
+      },
+      {
+        "description": "invalid: malformed three digit offset without colon (negative)",
+        "data": "02:31:17-013",
+        "valid": false
+      },
+      {
+        "description": "valid: fully-formed numeric offset with colon and minutes",
+        "data": "02:31:17+01:30",
+        "valid": true
+      }
+    ]
+  },
+  {
+    "description": "iso-date-time keeps the alternative ISO 8601 Appendix A offset forms that ajv-validator/ajv#1061 added (these are not normative for date-time, see above)",
+    "schema": {"format": "iso-date-time"},
+    "tests": [
+      {
+        "description": "valid: alternative ISO 8601 two digit offset",
+        "data": "2016-01-31T02:31:17+01",
+        "valid": true
+      },
+      {
+        "description": "valid: alternative ISO 8601 two digit offset (negative)",
+        "data": "2016-01-31T02:31:17-01",
+        "valid": true
+      },
+      {
+        "description": "valid: alternative ISO 8601 four digit offset without colon",
+        "data": "2016-01-31T02:31:17+0130",
+        "valid": true
+      },
+      {
+        "description": "valid: alternative ISO 8601 four digit offset without colon (negative)",
+        "data": "2016-01-31T02:31:17-0130",
+        "valid": true
+      },
+      {
+        "description": "invalid: malformed three digit offset without colon",
+        "data": "2016-01-31T02:31:17+013",
+        "valid": false
+      },
+      {
+        "description": "invalid: malformed three digit offset without colon (negative)",
         "data": "2016-01-31T02:31:17-013",
         "valid": false
       }
     ]
   },
   {
-    "description": "Support for alternative ISO-8601 timezone offset formats (#1061)",
-    "schema": {"format": "time"},
+    "description": "iso-time keeps the alternative ISO 8601 Appendix A offset forms that ajv-validator/ajv#1061 added (these are not normative for time, see above)",
+    "schema": {"format": "iso-time"},
     "tests": [
       {
-        "description": "valid positive two digit",
+        "description": "valid: alternative ISO 8601 two digit offset",
         "data": "02:31:17+01",
         "valid": true
       },
       {
-        "description": "valid negative two digit",
+        "description": "valid: alternative ISO 8601 two digit offset (negative)",
         "data": "02:31:17-01",
         "valid": true
       },
       {
-        "description": "valid positive four digit no colon",
+        "description": "valid: alternative ISO 8601 four digit offset without colon",
         "data": "02:31:17+0130",
         "valid": true
       },
       {
-        "description": "valid negative four digit no colon",
+        "description": "valid: alternative ISO 8601 four digit offset without colon (negative)",
         "data": "02:31:17-0130",
         "valid": true
       },
       {
-        "description": "invalid positive three digit no colon",
+        "description": "invalid: malformed three digit offset without colon",
         "data": "02:31:17+013",
         "valid": false
       },
       {
-        "description": "invalid negative three digit no colon",
+        "description": "invalid: malformed three digit offset without colon (negative)",
         "data": "02:31:17-013",
         "valid": false
       }

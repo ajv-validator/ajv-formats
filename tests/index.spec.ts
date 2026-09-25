@@ -49,3 +49,40 @@ describe("method get", () => {
     expect(() => addFormats.get("unknown" as FormatName)).toThrow()
   })
 })
+
+describe("date-time/time numeric offsets (RFC 3339 section 5.6)", () => {
+  // time-numoffset = ("+" / "-") time-hour ":" time-minute
+  // The colon and the minutes are both mandatory in the normative grammar,
+  // see https://www.rfc-editor.org/rfc/rfc3339#section-5.6
+  for (const mode of ["full", "fast"] as const) {
+    test(`date-time and time should reject colonless/minutes-less offsets (${mode} mode)`, () => {
+      const ajv = new Ajv({strictTypes: false})
+      addFormats(ajv, {mode, formats: ["time", "date-time"]})
+
+      const validateTime = ajv.compile({format: "time"})
+      expect(validateTime("14:30:00+05:30")).toEqual(true)
+      expect(validateTime("14:30:00+0530")).toEqual(false)
+      expect(validateTime("14:30:00+05")).toEqual(false)
+
+      const validateDateTime = ajv.compile({format: "date-time"})
+      expect(validateDateTime("2024-01-15T14:30:00+05:30")).toEqual(true)
+      expect(validateDateTime("2024-01-15T14:30:00+0530")).toEqual(false)
+      expect(validateDateTime("2023-12-11T23:03:23.568+09")).toEqual(false)
+    })
+
+    test(`iso-time and iso-date-time should keep accepting colonless/minutes-less offsets (${mode} mode)`, () => {
+      const ajv = new Ajv({strictTypes: false})
+      addFormats(ajv, {mode, formats: ["iso-time", "iso-date-time"]})
+
+      const validateIsoTime = ajv.compile({format: "iso-time"})
+      expect(validateIsoTime("14:30:00+05:30")).toEqual(true)
+      expect(validateIsoTime("14:30:00+0530")).toEqual(true)
+      expect(validateIsoTime("14:30:00+05")).toEqual(true)
+
+      const validateIsoDateTime = ajv.compile({format: "iso-date-time"})
+      expect(validateIsoDateTime("2024-01-15T14:30:00+05:30")).toEqual(true)
+      expect(validateIsoDateTime("2024-01-15T14:30:00+0530")).toEqual(true)
+      expect(validateIsoDateTime("2023-12-11T23:03:23.568+09")).toEqual(true)
+    })
+  }
+})
