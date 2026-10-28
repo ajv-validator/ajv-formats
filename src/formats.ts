@@ -234,11 +234,15 @@ function uri(str: string): boolean {
   return NOT_URI_FRAGMENT.test(str) && URI.test(str)
 }
 
-const BYTE = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/gm
+const BYTE = /^[A-Za-z0-9+/]*={0,2}$/gm
 
 function byte(str: string): boolean {
   BYTE.lastIndex = 0
-  return BYTE.test(str)
+  let match: RegExpExecArray | null
+  while ((match = BYTE.exec(str))) {
+    if (match[0].length % 4 === 0) return true
+  }
+  return false
 }
 
 const MIN_INT32 = -(2 ** 31)
