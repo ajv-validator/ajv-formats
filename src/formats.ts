@@ -234,11 +234,11 @@ function uri(str: string): boolean {
   return NOT_URI_FRAGMENT.test(str) && URI.test(str)
 }
 
-const BYTE = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/gm
+const BYTE = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
 
 function byte(str: string): boolean {
-  BYTE.lastIndex = 0
-  return BYTE.test(str)
+  // Base64 data may span multiple lines, but every line must be valid.
+  return str.split("\n").every((line) => BYTE.test(line))
 }
 
 const MIN_INT32 = -(2 ** 31)
